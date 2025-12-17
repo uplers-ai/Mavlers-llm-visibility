@@ -1,0 +1,28 @@
+# Environment variables (contains API keys!)
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs (optional - you may want to track these)
+# *.log
+
+# Local test files
+test_*.py
+

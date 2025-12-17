@@ -360,3 +360,519 @@
 2025-12-16 18:00:48,479 - INFO -    Raw data: audit_results.json
 2025-12-16 18:00:48,480 - INFO -    Screenshot: visibility_dashboard_2025-12-16.png
 2025-12-16 18:00:48,480 - INFO -    Archives: archives/
+2025-12-17 08:04:27,238 - INFO - 
+============================================================
+2025-12-17 08:04:27,238 - INFO - 🚀 STARTING LLM VISIBILITY AUDIT
+2025-12-17 08:04:27,239 - INFO - ============================================================
+2025-12-17 08:04:27,239 - INFO - Target Company: Uplers
+2025-12-17 08:04:27,239 - INFO - Target Region: USA
+2025-12-17 08:04:27,239 - INFO - Prompt Categories: 11
+2025-12-17 08:04:27,239 - INFO - Total Prompts: 46
+2025-12-17 08:04:27,239 - INFO - Runs per Prompt: 3
+2025-12-17 08:04:27,239 - INFO - Archive Retention: 12 weeks
+2025-12-17 08:04:27,239 - INFO - Email Notifications: Enabled
+2025-12-17 08:04:27,253 - INFO - 📊 Found previous audit from 2025-12-16
+2025-12-17 08:04:27,674 - INFO - ✅ OpenAI client initialized
+2025-12-17 08:04:27,885 - INFO - ✅ Anthropic client initialized
+2025-12-17 08:04:28,187 - INFO - ✅ Google Gemini client initialized
+2025-12-17 08:04:28,187 - INFO - ✅ xAI Grok client initialized
+2025-12-17 08:04:28,187 - INFO - ✅ Perplexity client initialized
+2025-12-17 08:04:55,927 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:05:17,986 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:05:51,887 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:06:03,858 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:06:17,254 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:06:29,815 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:09:13,490 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:09:23,241 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:09:37,183 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:09:48,511 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:09:59,645 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:10:10,591 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:13:23,649 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:13:43,540 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:14:22,863 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:14:34,352 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:14:45,358 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:14:57,112 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:18:28,491 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:18:55,598 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:19:34,849 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:19:48,792 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:20:08,902 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:20:25,860 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:24:29,788 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:24:41,400 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:25:00,262 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:25:12,352 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:25:24,951 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:25:36,135 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:28:40,423 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:28:55,732 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:29:15,450 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:29:26,881 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:29:38,884 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:29:50,800 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:33:16,465 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:33:29,994 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:33:41,154 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:33:53,454 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:34:06,327 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:34:18,571 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:37:53,357 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:38:04,372 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:38:16,144 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:38:27,033 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:38:43,356 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:38:55,433 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:41:38,680 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:41:48,354 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:41:59,601 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:42:13,427 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:42:28,636 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:42:41,790 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:45:44,115 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:46:00,594 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:46:12,207 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:46:24,187 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:46:33,754 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:46:43,839 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:48:47,337 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:49:01,923 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:49:18,800 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:49:32,069 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:49:44,667 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:49:56,400 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:52:49,431 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:53:00,624 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:53:21,229 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:53:33,649 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:53:46,281 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:54:00,463 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:57:36,146 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:57:57,741 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:58:25,796 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 08:58:38,361 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:58:55,288 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 08:59:07,309 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:03:04,136 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:03:17,899 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:03:38,855 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:03:50,904 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:04:02,528 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:04:17,325 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:08:22,228 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:08:40,084 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:08:57,146 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:09:11,356 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:09:26,527 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:09:40,423 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:13:47,057 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:14:01,349 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:14:21,840 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:14:46,065 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:15:10,335 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:15:34,493 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:20:06,044 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:20:20,539 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:20:39,932 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:20:58,070 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:21:21,969 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:21:44,652 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:25:33,936 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:25:42,917 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:25:52,348 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:26:03,837 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:26:14,074 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:26:26,911 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:30:05,069 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:30:19,029 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:30:36,170 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:30:47,630 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:31:00,376 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:31:12,048 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:35:12,459 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:35:25,513 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:35:40,500 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:35:52,803 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:36:08,803 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:36:32,429 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:40:30,230 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:40:47,761 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:41:03,263 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:41:16,478 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:41:31,175 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:41:44,367 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:45:34,775 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:45:51,204 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:46:04,731 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:46:18,687 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:46:32,596 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:46:45,256 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:50:35,608 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:50:55,436 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:51:10,423 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:51:23,571 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:51:37,531 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:51:53,040 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:55:23,085 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:55:47,935 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:56:12,240 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 09:56:24,062 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:56:39,106 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 09:56:52,722 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:00:21,136 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:00:32,995 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:00:43,227 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:00:56,126 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:01:11,117 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:01:26,061 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:04:54,370 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:05:01,540 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:05:08,901 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:05:21,167 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:05:32,659 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:05:43,141 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:09:18,080 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:09:31,105 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:09:43,769 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:09:54,799 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:10:06,524 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:10:21,859 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:13:53,594 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:14:14,333 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:14:30,688 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:14:40,696 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:14:49,816 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:15:00,780 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:18:04,540 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:18:17,827 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:18:30,587 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:18:41,930 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:18:52,764 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:19:04,706 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:21:37,823 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:21:54,623 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:22:06,463 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:22:30,212 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:22:42,548 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:23:00,310 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:26:20,514 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:26:35,238 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:26:55,471 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:27:10,024 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:27:23,682 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:27:39,022 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:31:37,379 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:32:10,981 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:32:27,558 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:32:45,047 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:33:03,768 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:33:18,683 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:33:55,167 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 10:34:25,229 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 10:35:26,176 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 10:37:26,176 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 10:37:27,232 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 10:37:57,295 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 10:38:57,379 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 10:40:57,379 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 10:40:58,448 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 10:41:28,520 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 10:42:28,575 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 10:44:28,576 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 10:45:42,979 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:45:52,381 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:46:05,562 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:46:20,494 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:46:35,005 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:46:48,686 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 10:47:29,309 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 10:47:59,370 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 10:48:59,426 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 10:50:59,426 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 10:51:00,481 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 10:51:30,539 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 10:52:30,609 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 10:54:30,609 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 10:54:31,700 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 10:55:01,765 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 10:56:01,915 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 10:58:01,915 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 10:59:12,093 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:59:32,986 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 10:59:48,805 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:00:00,757 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:00:13,332 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:00:25,236 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:00:57,620 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:01:27,674 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:02:27,724 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:04:27,725 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:04:28,805 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:04:58,865 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:05:58,928 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:07:58,929 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:07:59,994 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:08:30,078 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:09:30,147 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:11:30,147 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:12:15,284 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:12:30,271 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:12:45,542 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:12:57,240 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:13:11,389 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:13:22,818 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:14:00,332 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:14:30,391 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:15:30,450 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:17:30,450 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:17:31,503 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:18:01,561 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:19:01,622 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:21:01,623 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:21:02,748 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:21:32,804 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:22:32,869 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:24:32,870 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:25:23,008 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:25:35,903 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:25:50,675 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:26:01,462 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:26:13,886 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:26:27,915 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:27:12,421 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:27:42,476 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:28:42,531 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:30:42,531 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:30:43,583 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:31:13,633 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:32:13,714 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:34:13,714 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:34:14,766 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:34:44,821 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:35:44,872 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:37:44,873 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:38:30,878 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:38:39,851 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:38:46,200 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:38:57,382 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:39:08,211 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:39:18,340 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:40:02,513 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:40:32,570 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:41:32,630 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:43:32,631 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:43:33,685 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:44:03,738 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:45:03,874 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:47:03,875 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:47:04,966 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:47:35,037 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:48:35,090 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:50:35,091 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:51:24,408 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:51:46,417 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:52:06,515 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 11:52:29,682 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:52:57,543 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:53:18,271 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 11:53:48,004 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:54:18,105 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:55:18,157 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 11:57:18,157 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 11:57:19,211 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 11:57:49,271 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 11:58:49,341 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:00:49,342 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:00:50,426 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:01:20,494 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:02:20,548 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:04:20,549 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:05:46,310 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:05:59,490 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:06:14,708 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:06:27,346 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:06:39,889 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:06:51,663 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:07:31,509 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:08:01,579 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:09:01,651 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:11:01,652 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:11:02,709 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:11:32,766 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:12:32,843 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:14:32,843 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:14:33,910 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:15:04,082 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:16:04,146 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:18:04,146 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:18:46,397 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:18:57,415 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:19:16,892 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:19:28,948 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:19:42,904 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:19:56,661 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:20:35,679 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:21:05,738 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:22:05,807 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:24:05,807 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:24:06,867 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:24:36,918 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:25:37,111 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:27:37,112 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:27:38,172 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:28:08,225 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:29:08,307 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:31:08,307 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:33:11,217 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:33:44,369 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:34:08,789 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:34:25,551 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:34:47,392 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:35:04,239 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:35:55,959 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:36:26,028 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:37:26,093 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:39:26,093 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:39:27,142 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:39:57,200 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:40:57,264 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:42:57,264 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:42:58,331 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:43:28,390 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:44:28,442 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:46:28,443 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:47:30,685 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:47:40,693 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:47:52,458 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 12:48:04,023 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:48:17,059 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:48:29,245 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 12:49:07,307 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:49:37,480 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:50:37,553 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:52:37,554 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:52:38,629 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:53:08,693 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:54:08,759 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:56:08,759 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 12:56:09,822 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 12:56:39,902 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 12:57:39,961 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 12:59:39,962 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:00:25,910 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:00:42,831 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:01:07,859 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:01:18,466 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:01:29,660 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:01:44,359 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:02:19,231 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:02:49,305 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:03:49,369 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:05:49,370 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:05:50,452 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:06:20,512 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:07:20,579 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:09:20,579 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:09:21,669 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:09:51,759 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:10:51,816 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:12:51,817 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:14:17,148 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:14:43,926 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:14:59,675 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:15:20,139 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:15:36,446 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:15:56,493 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:16:35,652 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:17:05,733 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:18:05,795 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:20:05,796 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:20:06,859 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:20:36,921 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:21:37,002 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:23:37,002 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:23:38,069 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:24:08,134 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:25:08,199 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:27:08,199 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:28:08,858 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:28:18,689 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:28:39,013 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:28:53,974 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:29:05,536 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:29:19,679 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:29:54,238 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:30:24,310 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:31:24,376 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:33:24,377 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:33:25,491 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:33:55,558 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:34:55,661 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:36:55,661 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:36:56,727 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:37:26,785 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:38:26,851 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:40:26,851 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:41:35,345 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:41:56,915 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:42:07,984 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-12-17 13:42:18,151 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:42:30,081 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:42:40,524 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-12-17 13:43:10,599 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:43:40,667 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:44:40,754 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:46:40,754 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:46:41,823 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:47:11,921 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:48:12,066 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:50:12,066 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:50:13,152 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2025-12-17 13:50:43,235 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2025-12-17 13:51:43,288 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2025-12-17 13:53:43,289 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2025-12-17 13:54:16,803 - INFO - 📊 Analyzing results...
+2025-12-17 13:54:16,848 - INFO - ✅ Results saved to audit_results.json
+2025-12-17 13:54:16,848 - INFO - 📁 Archived to archives/audit_results_2025-12-17.json
+2025-12-17 13:54:16,848 - INFO - 🎨 Generating HTML dashboard...
+2025-12-17 13:54:16,849 - INFO - ✅ Dashboard saved to visibility_dashboard.html
+2025-12-17 13:54:16,849 - INFO - 📁 Archived to archives/visibility_dashboard_2025-12-17.html
+2025-12-17 13:54:16,875 - INFO - 📸 Capturing screenshot of visibility_dashboard.html...
+2025-12-17 13:54:21,250 - INFO - ✅ Screenshot saved to visibility_dashboard_2025-12-17.png
+2025-12-17 13:54:21,251 - INFO - 📁 Screenshot archived to archives/visibility_dashboard_2025-12-17.png
+2025-12-17 13:54:21,266 - INFO - 
+============================================================
+2025-12-17 13:54:21,266 - INFO - 📈 AUDIT SUMMARY
+2025-12-17 13:54:21,266 - INFO - ============================================================
+2025-12-17 13:54:21,266 - INFO - 🎯 Overall Visibility Score: 10.6%
+2025-12-17 13:54:21,266 - INFO - 🏆 Overall Ranking: #10 of 1100
+2025-12-17 13:54:21,266 - INFO - 
+📊 Changes since 2025-12-16:
+2025-12-17 13:54:21,266 - INFO -    📈 Overall visibility improved by 0.6%
+2025-12-17 13:54:21,266 - INFO -    🏆 Ranking improved by 2 position(s)
+2025-12-17 13:54:21,266 - INFO - 
+📊 By LLM:
+2025-12-17 13:54:21,266 - INFO -    Perplexity: 25.4% (↑3.7%) (35/138 queries)
+2025-12-17 13:54:21,266 - INFO -    Gemini: 0.0% (0/138 queries)
+2025-12-17 13:54:21,267 - INFO -    Claude: 2.2% (↑1.5%) (3/138 queries)
+2025-12-17 13:54:21,267 - INFO -    Grok: 2.2% (↓3.6%) (3/138 queries)
+2025-12-17 13:54:21,267 - INFO -    ChatGPT: 23.2% (↑1.5%) (32/138 queries)
+2025-12-17 13:54:21,267 - INFO - 
+⚠️  Weak Spots:
+2025-12-17 13:54:21,267 - INFO -    - Vetting Process: 3.3%
+2025-12-17 13:54:21,267 - INFO -    - Talent Platform for Tech Companies: 3.3%
+2025-12-17 13:54:21,267 - INFO -    - Fast Hiring Process: 0.0%
+2025-12-17 13:54:21,267 - INFO -    - Cost and Budget: 6.7%
+2025-12-17 13:54:21,267 - INFO -    - Hiring Models: 18.3%
+2025-12-17 13:54:21,267 - INFO -    - Top Platforms for Indian Developers: 13.3%
+2025-12-17 13:54:21,267 - INFO -    - How to Hire from India: 8.9%
+2025-12-17 13:54:21,267 - INFO -    - AI-Driven Recruitment: 8.3%
+2025-12-17 13:54:21,267 - INFO -    - Direct Hiring Queries: 11.3%
+2025-12-17 13:54:21,267 - INFO - 
+✅ Audit complete!
+2025-12-17 13:54:21,267 - INFO -    Dashboard: visibility_dashboard.html
+2025-12-17 13:54:21,267 - INFO -    Raw data: audit_results.json
+2025-12-17 13:54:21,267 - INFO -    Screenshot: visibility_dashboard_2025-12-17.png
+2025-12-17 13:54:21,267 - INFO -    Archives: archives/

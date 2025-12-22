@@ -46,6 +46,12 @@ jobs:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          # LLM Enable/Disable settings
+          ENABLE_CHATGPT: "true"
+          ENABLE_CLAUDE: "true"
+          ENABLE_GEMINI: "true"
+          ENABLE_GROK: "true"  # Enabled - paid API
+          ENABLE_PERPLEXITY: "true"
         run: |
           python visibility_audit2.0.py --no-email || true
       

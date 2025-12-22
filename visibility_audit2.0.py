@@ -118,6 +118,20 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
 EMAIL_TO = os.getenv("EMAIL_TO", "")
 EMAIL_ENABLED = bool(SMTP_USER and SMTP_PASSWORD and EMAIL_TO)
 
+# LLM Enable/Disable settings (set to "false" to disable)
+# Grok is disabled by default due to severe rate limits on free tier
+ENABLE_CHATGPT = os.getenv("ENABLE_CHATGPT", "true").lower() == "true"
+ENABLE_CLAUDE = os.getenv("ENABLE_CLAUDE", "true").lower() == "true"
+ENABLE_GEMINI = os.getenv("ENABLE_GEMINI", "true").lower() == "true"
+ENABLE_GROK = os.getenv("ENABLE_GROK", "true").lower() == "true"  # Enabled - paid API
+ENABLE_PERPLEXITY = os.getenv("ENABLE_PERPLEXITY", "true").lower() == "true"  # Enabled - paid API
+
+# Auto-skip settings: Skip an LLM if it fails this many times consecutively
+CONSECUTIVE_FAILURES_TO_SKIP = 3
+
+# Track consecutive failures per LLM
+llm_failure_counts = {}
+
 # Known platform patterns to help with detection (will also find new ones dynamically)
 KNOWN_PLATFORMS = [
     "Uplers", "Toptal", "Turing", "Andela", "Arc", "CloudDevs", 
@@ -309,7 +323,7 @@ def initialize_clients():
     clients_available = []
     
     # OpenAI (ChatGPT)
-    if os.getenv("OPENAI_API_KEY"):
+    if os.getenv("OPENAI_API_KEY") and ENABLE_CHATGPT:
         try:
             from openai import OpenAI
             openai_client = OpenAI()
@@ -317,9 +331,11 @@ def initialize_clients():
             logger.info("✅ OpenAI client initialized")
         except ImportError:
             logger.warning("⚠️  OpenAI package not installed. Run: pip install openai")
+    elif os.getenv("OPENAI_API_KEY") and not ENABLE_CHATGPT:
+        logger.info("⏭️  ChatGPT disabled (ENABLE_CHATGPT=false)")
     
     # Anthropic (Claude)
-    if os.getenv("ANTHROPIC_API_KEY"):
+    if os.getenv("ANTHROPIC_API_KEY") and ENABLE_CLAUDE:
         try:
             import anthropic
             anthropic_client = anthropic.Anthropic()
@@ -327,9 +343,11 @@ def initialize_clients():
             logger.info("✅ Anthropic client initialized")
         except ImportError:
             logger.warning("⚠️  Anthropic package not installed. Run: pip install anthropic")
+    elif os.getenv("ANTHROPIC_API_KEY") and not ENABLE_CLAUDE:
+        logger.info("⏭️  Claude disabled (ENABLE_CLAUDE=false)")
     
     # Google (Gemini)
-    if os.getenv("GOOGLE_API_KEY"):
+    if os.getenv("GOOGLE_API_KEY") and ENABLE_GEMINI:
         try:
             import google.generativeai as genai
             genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -338,18 +356,24 @@ def initialize_clients():
             logger.info("✅ Google Gemini client initialized")
         except ImportError:
             logger.warning("⚠️  Google GenAI package not installed. Run: pip install google-generativeai")
+    elif os.getenv("GOOGLE_API_KEY") and not ENABLE_GEMINI:
+        logger.info("⏭️  Gemini disabled (ENABLE_GEMINI=false)")
     
-    # xAI (Grok)
-    if os.getenv("XAI_API_KEY"):
+    # xAI (Grok) - Disabled by default due to severe rate limits
+    if os.getenv("XAI_API_KEY") and ENABLE_GROK:
         xai_api_key = os.getenv("XAI_API_KEY")
         clients_available.append("xAI")
         logger.info("✅ xAI Grok client initialized")
+    elif os.getenv("XAI_API_KEY") and not ENABLE_GROK:
+        logger.info("⏭️  xAI Grok disabled (ENABLE_GROK=false) - severe rate limits on free tier")
     
     # Perplexity
-    if os.getenv("PERPLEXITY_API_KEY"):
+    if os.getenv("PERPLEXITY_API_KEY") and ENABLE_PERPLEXITY:
         perplexity_api_key = os.getenv("PERPLEXITY_API_KEY")
         clients_available.append("Perplexity")
         logger.info("✅ Perplexity client initialized")
+    elif os.getenv("PERPLEXITY_API_KEY") and not ENABLE_PERPLEXITY:
+        logger.info("⏭️  Perplexity disabled (ENABLE_PERPLEXITY=false)")
     
     return clients_available
 
@@ -601,6 +625,8 @@ def extract_companies(text: str) -> dict:
 
 def run_single_query(llm_name: str, prompt: str, intent: str, run_num: int):
     """Run a single query and return results."""
+    global llm_failure_counts
+    
     query_funcs = {
         "ChatGPT": query_openai,
         "Claude": query_anthropic,
@@ -609,8 +635,32 @@ def run_single_query(llm_name: str, prompt: str, intent: str, run_num: int):
         "Perplexity": query_perplexity
     }
     
+    # Check if this LLM should be skipped due to consecutive failures
+    if llm_failure_counts.get(llm_name, 0) >= CONSECUTIVE_FAILURES_TO_SKIP:
+        # Return empty result - LLM is being skipped
+        return {
+            "llm": llm_name,
+            "intent": intent,
+            "prompt": prompt,
+            "run": run_num,
+            "response": "",
+            "companies_mentioned": {},
+            "target_mentioned": False,
+            "timestamp": datetime.now().isoformat(),
+            "skipped": True
+        }
+    
     response = query_funcs[llm_name](prompt)
     companies = extract_companies(response)
+    
+    # Track failures for auto-skip
+    if not response:
+        llm_failure_counts[llm_name] = llm_failure_counts.get(llm_name, 0) + 1
+        if llm_failure_counts[llm_name] == CONSECUTIVE_FAILURES_TO_SKIP:
+            logger.warning(f"⏭️  Skipping {llm_name} for remaining queries ({CONSECUTIVE_FAILURES_TO_SKIP} consecutive failures)")
+    else:
+        # Reset failure count on success
+        llm_failure_counts[llm_name] = 0
     
     # Check if target is mentioned (case-insensitive check)
     target_mentioned = any(

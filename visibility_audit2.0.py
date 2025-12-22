@@ -132,6 +132,24 @@ CONSECUTIVE_FAILURES_TO_SKIP = 3
 # Track consecutive failures per LLM
 llm_failure_counts = {}
 
+# ============================================================================
+# GOALS CONFIGURATION - Target visibility scores per LLM
+# ============================================================================
+GOALS = {
+    "overall_visibility_score": 35,  # Target overall visibility (average of all LLMs)
+    "overall_rank": 10,              # Target to be in top 10 ranking
+    "by_llm": {
+        "ChatGPT": 40,      # Target 40% visibility on ChatGPT
+        "Claude": 25,       # Target 25% visibility on Claude
+        "Gemini": 40,       # Target 40% visibility on Gemini
+        "Grok": 25,         # Target 25% visibility on Grok
+        "Perplexity": 40,   # Target 40% visibility on Perplexity
+    },
+}
+
+# Monthly comparison settings
+MONTHS_TO_COMPARE = 3  # Compare last 3 months
+
 # Known platform patterns to help with detection (will also find new ones dynamically)
 KNOWN_PLATFORMS = [
     "Uplers", "Toptal", "Turing", "Andela", "Arc", "CloudDevs", 
@@ -312,6 +330,323 @@ def get_previous_results():
     return None
 
 
+def get_monthly_results():
+    """Load audit results from approximately 30 days ago for monthly comparison."""
+    ensure_archive_dir()
+    
+    # Find all previous result files
+    result_files = sorted(glob.glob(f"{ARCHIVE_DIR}/audit_results_*.json"), reverse=True)
+    
+    if not result_files:
+        return None
+    
+    today = datetime.now().date()
+    target_date = today - timedelta(days=30)
+    
+    best_match = None
+    best_diff = float('inf')
+    
+    for filepath in result_files:
+        try:
+            # Extract date from filename
+            date_match = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(filepath))
+            if date_match:
+                file_date = datetime.strptime(date_match.group(1), '%Y-%m-%d').date()
+                diff = abs((file_date - target_date).days)
+                
+                # Look for files between 25-35 days ago (30 ± 5 days)
+                if 25 <= (today - file_date).days <= 35 and diff < best_diff:
+                    best_diff = diff
+                    best_match = filepath
+        except Exception as e:
+            continue
+    
+    if best_match:
+        try:
+            with open(best_match, 'r') as f:
+                data = json.load(f)
+                date_match = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(best_match))
+                if date_match:
+                    data['_archive_date'] = date_match.group(1)
+                logger.info(f"📅 Found monthly comparison data from {data.get('_archive_date', 'unknown')}")
+                return data
+        except Exception as e:
+            logger.warning(f"Could not load monthly data {best_match}: {e}")
+    
+    return None
+
+
+def get_historical_trend(days: int = 90):
+    """Get historical data points for trend analysis over specified days."""
+    ensure_archive_dir()
+    
+    result_files = sorted(glob.glob(f"{ARCHIVE_DIR}/audit_results_*.json"))
+    
+    if not result_files:
+        return []
+    
+    today = datetime.now().date()
+    cutoff_date = today - timedelta(days=days)
+    
+    trend_data = []
+    
+    for filepath in result_files:
+        try:
+            date_match = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(filepath))
+            if date_match:
+                file_date = datetime.strptime(date_match.group(1), '%Y-%m-%d').date()
+                
+                if file_date >= cutoff_date:
+                    with open(filepath, 'r') as f:
+                        data = json.load(f)
+                        if "analysis" in data:
+                            trend_data.append({
+                                "date": date_match.group(1),
+                                "visibility_score": data["analysis"]["overall"].get("visibility_score", 0),
+                                "target_rank": data["analysis"]["overall"].get("target_rank", 999),
+                                "mention_rate": data["analysis"]["overall"].get("mention_rate", 0)
+                            })
+        except Exception as e:
+            continue
+    
+    return sorted(trend_data, key=lambda x: x["date"])
+
+
+# ============================================================================
+# GOALS TRACKING FUNCTIONS
+# ============================================================================
+
+def calculate_goal_progress(analysis: dict) -> dict:
+    """Calculate progress toward visibility goals for each LLM."""
+    progress = {
+        "overall": {},
+        "by_llm": {},
+        "summary": {
+            "achieved": 0,
+            "in_progress": 0,
+            "far": 0,
+            "total": 0
+        }
+    }
+    
+    # Overall visibility score progress
+    current_overall = analysis["overall"].get("visibility_score", 0)
+    target_overall = GOALS.get("overall_visibility_score", 50)
+    overall_percent = min(100, round((current_overall / target_overall) * 100, 1)) if target_overall > 0 else 0
+    
+    progress["overall"]["visibility_score"] = {
+        "current": current_overall,
+        "target": target_overall,
+        "progress_percent": overall_percent,
+        "remaining": max(0, target_overall - current_overall),
+        "status": "achieved" if current_overall >= target_overall else "in_progress" if overall_percent >= 50 else "far"
+    }
+    
+    # Overall rank progress
+    current_rank = analysis["overall"].get("target_rank", 999)
+    target_rank = GOALS.get("overall_rank", 10)
+    # For rank, lower is better, so invert the calculation
+    rank_progress = min(100, round((target_rank / current_rank) * 100, 1)) if current_rank > 0 else 0
+    
+    progress["overall"]["rank"] = {
+        "current": current_rank,
+        "target": target_rank,
+        "progress_percent": rank_progress,
+        "remaining": max(0, current_rank - target_rank),
+        "status": "achieved" if current_rank <= target_rank else "in_progress" if current_rank <= target_rank * 2 else "far"
+    }
+    
+    # Per-LLM visibility score progress
+    llm_goals = GOALS.get("by_llm", {})
+    for llm, data in analysis.get("by_llm", {}).items():
+        current_score = data.get("visibility_score", 0)
+        target_score = llm_goals.get(llm, 30)  # Default 30% if not specified
+        percent_complete = min(100, round((current_score / target_score) * 100, 1)) if target_score > 0 else 0
+        
+        if current_score >= target_score:
+            status = "achieved"
+            progress["summary"]["achieved"] += 1
+        elif percent_complete >= 50:
+            status = "in_progress"
+            progress["summary"]["in_progress"] += 1
+        else:
+            status = "far"
+            progress["summary"]["far"] += 1
+        
+        progress["summary"]["total"] += 1
+        
+        progress["by_llm"][llm] = {
+            "current": current_score,
+            "target": target_score,
+            "progress_percent": percent_complete,
+            "remaining": max(0, round(target_score - current_score, 1)),
+            "status": status,
+            "mentions": data.get("mentions", 0),
+            "queries": data.get("queries", 0)
+        }
+    
+    return progress
+
+
+def get_monthly_aggregates(months: int = 3) -> list:
+    """Get monthly aggregated data for the last N months."""
+    ensure_archive_dir()
+    
+    result_files = sorted(glob.glob(f"{ARCHIVE_DIR}/audit_results_*.json"))
+    
+    if not result_files:
+        return []
+    
+    # Group results by month
+    monthly_data = defaultdict(lambda: {
+        "dates": [],
+        "by_llm": defaultdict(lambda: {"visibility_scores": [], "mentions": [], "queries": []}),
+        "overall": {"visibility_scores": [], "ranks": []}
+    })
+    
+    for filepath in result_files:
+        try:
+            date_match = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(filepath))
+            if date_match:
+                file_date = datetime.strptime(date_match.group(1), '%Y-%m-%d').date()
+                month_key = file_date.strftime("%Y-%m")  # e.g., "2026-01"
+                
+                with open(filepath, 'r') as f:
+                    data = json.load(f)
+                    if "analysis" in data:
+                        analysis = data["analysis"]
+                        monthly_data[month_key]["dates"].append(date_match.group(1))
+                        
+                        # Overall metrics
+                        monthly_data[month_key]["overall"]["visibility_scores"].append(
+                            analysis["overall"].get("visibility_score", 0)
+                        )
+                        monthly_data[month_key]["overall"]["ranks"].append(
+                            analysis["overall"].get("target_rank", 999)
+                        )
+                        
+                        # Per-LLM metrics
+                        for llm, llm_data in analysis.get("by_llm", {}).items():
+                            monthly_data[month_key]["by_llm"][llm]["visibility_scores"].append(
+                                llm_data.get("visibility_score", 0)
+                            )
+                            monthly_data[month_key]["by_llm"][llm]["mentions"].append(
+                                llm_data.get("mentions", 0)
+                            )
+                            monthly_data[month_key]["by_llm"][llm]["queries"].append(
+                                llm_data.get("queries", 0)
+                            )
+        except Exception as e:
+            logger.warning(f"Error loading monthly data from {filepath}: {e}")
+            continue
+    
+    # Calculate averages for each month
+    aggregated = []
+    sorted_months = sorted(monthly_data.keys(), reverse=True)[:months]  # Get last N months
+    
+    for month_key in sorted(sorted_months):  # Sort chronologically
+        month_info = monthly_data[month_key]
+        
+        # Calculate overall averages
+        avg_visibility = round(sum(month_info["overall"]["visibility_scores"]) / len(month_info["overall"]["visibility_scores"]), 1) if month_info["overall"]["visibility_scores"] else 0
+        avg_rank = round(sum(month_info["overall"]["ranks"]) / len(month_info["overall"]["ranks"]), 1) if month_info["overall"]["ranks"] else 999
+        
+        month_result = {
+            "month": month_key,
+            "month_display": datetime.strptime(month_key, "%Y-%m").strftime("%b %Y"),  # e.g., "Jan 2026"
+            "audit_count": len(month_info["dates"]),
+            "dates": month_info["dates"],
+            "overall": {
+                "avg_visibility_score": avg_visibility,
+                "avg_rank": avg_rank
+            },
+            "by_llm": {}
+        }
+        
+        # Calculate per-LLM averages
+        for llm, llm_data in month_info["by_llm"].items():
+            if llm_data["visibility_scores"]:
+                month_result["by_llm"][llm] = {
+                    "avg_visibility_score": round(sum(llm_data["visibility_scores"]) / len(llm_data["visibility_scores"]), 1),
+                    "total_mentions": sum(llm_data["mentions"]),
+                    "avg_mentions": round(sum(llm_data["mentions"]) / len(llm_data["mentions"]), 1),
+                    "total_queries": sum(llm_data["queries"])
+                }
+        
+        aggregated.append(month_result)
+    
+    return aggregated
+
+
+def calculate_monthly_changes(monthly_aggregates: list) -> dict:
+    """Calculate month-over-month changes."""
+    if len(monthly_aggregates) < 2:
+        return {"has_comparison": False}
+    
+    changes = {
+        "has_comparison": True,
+        "months": [m["month_display"] for m in monthly_aggregates],
+        "overall": {},
+        "by_llm": {}
+    }
+    
+    # Get current and previous month
+    current = monthly_aggregates[-1] if monthly_aggregates else None
+    previous = monthly_aggregates[-2] if len(monthly_aggregates) >= 2 else None
+    
+    if current and previous:
+        # Overall changes
+        current_vis = current["overall"]["avg_visibility_score"]
+        prev_vis = previous["overall"]["avg_visibility_score"]
+        changes["overall"]["visibility"] = {
+            "current": current_vis,
+            "previous": prev_vis,
+            "change": round(current_vis - prev_vis, 1),
+            "direction": "up" if current_vis > prev_vis else "down" if current_vis < prev_vis else "same"
+        }
+        
+        current_rank = current["overall"]["avg_rank"]
+        prev_rank = previous["overall"]["avg_rank"]
+        rank_change = prev_rank - current_rank  # Positive = improvement
+        changes["overall"]["rank"] = {
+            "current": current_rank,
+            "previous": prev_rank,
+            "change": round(rank_change, 1),
+            "direction": "up" if rank_change > 0 else "down" if rank_change < 0 else "same"
+        }
+        
+        # Per-LLM changes
+        all_llms = set(current.get("by_llm", {}).keys()) | set(previous.get("by_llm", {}).keys())
+        for llm in all_llms:
+            curr_llm = current.get("by_llm", {}).get(llm, {})
+            prev_llm = previous.get("by_llm", {}).get(llm, {})
+            
+            curr_vis = curr_llm.get("avg_visibility_score", 0)
+            prev_vis_llm = prev_llm.get("avg_visibility_score", 0)
+            vis_change = round(curr_vis - prev_vis_llm, 1)
+            
+            curr_mentions = curr_llm.get("total_mentions", 0)
+            prev_mentions = prev_llm.get("total_mentions", 0)
+            mentions_change = curr_mentions - prev_mentions
+            
+            changes["by_llm"][llm] = {
+                "visibility": {
+                    "current": curr_vis,
+                    "previous": prev_vis_llm,
+                    "change": vis_change,
+                    "direction": "up" if vis_change > 0 else "down" if vis_change < 0 else "same"
+                },
+                "mentions": {
+                    "current": curr_mentions,
+                    "previous": prev_mentions,
+                    "change": mentions_change,
+                    "direction": "up" if mentions_change > 0 else "down" if mentions_change < 0 else "same"
+                }
+            }
+    
+    return changes
+
+
 # ============================================================================
 # API CLIENT INITIALIZATION
 # ============================================================================
@@ -350,10 +685,35 @@ def initialize_clients():
     if os.getenv("GOOGLE_API_KEY") and ENABLE_GEMINI:
         try:
             import google.generativeai as genai
+            from google.generativeai.types import HarmCategory, HarmBlockThreshold
+            
             genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-            gemini_model = genai.GenerativeModel('gemini-2.0-flash')
+            
+            # Disable all safety filters to prevent business/entity queries from being blocked
+            safety_settings = {
+                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+            }
+
+            # System instruction for entity extraction
+            system_instruction = (
+                "You are an expert business analyst. Identify mentions of specific entities. "
+                "Return ONLY a valid JSON list of strings. If none, return []."
+            )
+
+            # UPDATED MODEL NAME FOR 2026
+            # Use 'gemini-2.5-flash' for the best balance of speed and intelligence.
+            # Alternatively, use 'gemini-2.0-flash-001' for high-throughput legacy support.
+            gemini_model = genai.GenerativeModel(
+                model_name='gemini-2.5-flash',
+                safety_settings=safety_settings,
+                system_instruction=system_instruction,
+                generation_config={"response_mime_type": "application/json"}
+            )
             clients_available.append("Google")
-            logger.info("✅ Google Gemini client initialized")
+            logger.info("✅ Google Gemini client initialized with 2026 model (gemini-2.5-flash)")
         except ImportError:
             logger.warning("⚠️  Google GenAI package not installed. Run: pip install google-generativeai")
     elif os.getenv("GOOGLE_API_KEY") and not ENABLE_GEMINI:
@@ -422,16 +782,55 @@ def query_anthropic(prompt: str) -> str:
 
 
 def query_gemini(prompt: str) -> str:
-    """Query Google Gemini with retry logic."""
+    """Query Google Gemini with retry logic and improved error handling for JSON responses."""
     if not gemini_model:
         return ""
     
     def _query():
         # Add delay to avoid rate limiting (Google free tier has strict limits)
         time.sleep(2)
-        full_prompt = f"You are a helpful assistant. The user is based in {TARGET_REGION}. When recommending platforms or companies, please be specific and name them.\n\nUser: {prompt}"
-        response = gemini_model.generate_content(full_prompt)
-        return response.text
+        
+        try:
+            response = gemini_model.generate_content(prompt)
+            
+            # Check if the model actually returned a candidate
+            if not response.candidates:
+                logger.warning("⚠️  Gemini: No candidates returned. Prompt may have been blocked.")
+                return ""
+            
+            # Check the finish reason (1 = STOP/success, 3 = SAFETY, etc.)
+            finish_reason = response.candidates[0].finish_reason
+            if finish_reason != 1:  # 1 corresponds to 'STOP' (Success)
+                logger.warning(f"⚠️  Gemini: Response incomplete. Finish reason: {finish_reason}")
+                # Log safety ratings if it was blocked by a filter
+                if finish_reason == 3:  # SAFETY
+                    safety_ratings = response.candidates[0].safety_ratings
+                    logger.warning(f"⚠️  Gemini: Safety Ratings: {safety_ratings}")
+                return ""
+            
+            # Safely access text only if it exists
+            if response.candidates[0].content.parts:
+                json_text = response.text
+                
+                # Parse JSON response and convert to readable text format
+                try:
+                    entities = json.loads(json_text)
+                    if isinstance(entities, list) and len(entities) > 0:
+                        # Format as readable text for extract_companies to parse
+                        return ", ".join(entities)
+                    else:
+                        return ""
+                except json.JSONDecodeError:
+                    # If JSON parsing fails, return raw text
+                    logger.warning("⚠️  Gemini: Failed to parse JSON response, returning raw text")
+                    return json_text
+            else:
+                logger.warning("⚠️  Gemini: Response parts are empty.")
+                return ""
+                
+        except Exception as e:
+            logger.error(f"❌ Error querying Gemini: {e}")
+            return ""
     
     return retry_with_backoff(_query)()
 
@@ -840,8 +1239,15 @@ def analyze_results(results: list) -> dict:
     
     return analysis
 
-def generate_html_dashboard(analysis: dict, results: list) -> str:
-    """Generate an interactive HTML dashboard."""
+def generate_html_dashboard(analysis: dict, results: list, weekly_changes: dict = None, monthly_changes: dict = None, trend_data: list = None, goal_progress: dict = None, monthly_aggregates: list = None) -> str:
+    """Generate an interactive HTML dashboard with weekly/monthly comparison, trends, goals, and monthly comparisons."""
+    
+    # Default empty values if not provided
+    weekly_changes = weekly_changes or {}
+    monthly_changes = monthly_changes or {}
+    trend_data = trend_data or []
+    goal_progress = goal_progress or {}
+    monthly_aggregates = monthly_aggregates or []
     
     # Get target rank for each LLM
     target_ranks = {}
@@ -1261,6 +1667,153 @@ def generate_html_dashboard(analysis: dict, results: list) -> str:
             margin-top: 60px;
         }}
         
+        /* Goals Section */
+        .goals-section {{
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 48px;
+        }}
+        
+        .goals-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }}
+        
+        .goal-card {{
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }}
+        
+        .goal-card.achieved {{
+            border-left: 4px solid var(--success);
+        }}
+        
+        .goal-card.in_progress {{
+            border-left: 4px solid var(--warning);
+        }}
+        
+        .goal-card.far {{
+            border-left: 4px solid var(--danger);
+        }}
+        
+        .goal-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }}
+        
+        .goal-llm {{
+            font-weight: 600;
+            font-size: 16px;
+        }}
+        
+        .goal-status {{
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }}
+        
+        .goal-status.achieved {{
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--success);
+        }}
+        
+        .goal-status.in_progress {{
+            background: rgba(255, 165, 2, 0.2);
+            color: var(--warning);
+        }}
+        
+        .goal-status.far {{
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--danger);
+        }}
+        
+        .goal-progress {{
+            margin: 16px 0;
+        }}
+        
+        .progress-bar {{
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+        }}
+        
+        .progress-fill {{
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }}
+        
+        .progress-fill.achieved {{ background: var(--success); }}
+        .progress-fill.in_progress {{ background: var(--warning); }}
+        .progress-fill.far {{ background: var(--danger); }}
+        
+        .goal-metrics {{
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }}
+        
+        .goal-current {{
+            font-weight: 600;
+            color: var(--text-primary);
+        }}
+        
+        /* Monthly Comparison Table */
+        .monthly-table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }}
+        
+        .monthly-table th,
+        .monthly-table td {{
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }}
+        
+        .monthly-table th {{
+            background: var(--bg-secondary);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }}
+        
+        .monthly-table td {{
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+        }}
+        
+        .monthly-table tr:hover {{
+            background: var(--bg-secondary);
+        }}
+        
+        .change-positive {{
+            color: var(--success);
+        }}
+        
+        .change-negative {{
+            color: var(--danger);
+        }}
+        
+        .change-neutral {{
+            color: var(--text-muted);
+        }}
+        
         /* Responsive */
         @media (max-width: 768px) {{
             h1 {{ font-size: 32px; }}
@@ -1302,6 +1855,323 @@ def generate_html_dashboard(analysis: dict, results: list) -> str:
             </div>
         </div>
         
+        <!-- Weekly/Monthly Changes Section -->
+        <div class="changes-section" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 48px;">
+'''
+    
+    # Add weekly changes card if available
+    if weekly_changes.get("has_previous"):
+        weekly_score_change = weekly_changes.get("overall", {}).get("visibility_score", {}).get("change", 0)
+        weekly_rank_change = weekly_changes.get("overall", {}).get("target_rank", {}).get("change", 0)
+        weekly_direction = "📈" if weekly_score_change > 0 else "📉" if weekly_score_change < 0 else "➡️"
+        weekly_color = "var(--success)" if weekly_score_change > 0 else "var(--danger)" if weekly_score_change < 0 else "var(--text-secondary)"
+        
+        html += f'''
+            <div class="score-card" style="border-left: 4px solid {weekly_color};">
+                <div class="label">📊 Weekly Change</div>
+                <div class="value" style="color: {weekly_color}; font-size: 32px;">
+                    {weekly_direction} {'+' if weekly_score_change > 0 else ''}{weekly_score_change}%
+                </div>
+                <div class="detail">Compared to {weekly_changes.get('previous_date', 'last week')}</div>
+                <div class="detail" style="margin-top: 8px;">
+                    Rank: {'↑' if weekly_rank_change > 0 else '↓' if weekly_rank_change < 0 else '→'}{abs(weekly_rank_change)} position{'s' if abs(weekly_rank_change) != 1 else ''}
+                </div>
+            </div>
+'''
+    else:
+        html += '''
+            <div class="score-card" style="border-left: 4px solid var(--text-muted);">
+                <div class="label">📊 Weekly Change</div>
+                <div class="value" style="color: var(--text-secondary); font-size: 24px;">No prior data</div>
+                <div class="detail">First run - comparison available next week</div>
+            </div>
+'''
+    
+    # Add monthly changes card if available
+    if monthly_changes.get("has_previous"):
+        monthly_score_change = monthly_changes.get("overall", {}).get("visibility_score", {}).get("change", 0)
+        monthly_rank_change = monthly_changes.get("overall", {}).get("target_rank", {}).get("change", 0)
+        monthly_direction = "📈" if monthly_score_change > 0 else "📉" if monthly_score_change < 0 else "➡️"
+        monthly_color = "var(--success)" if monthly_score_change > 0 else "var(--danger)" if monthly_score_change < 0 else "var(--text-secondary)"
+        
+        html += f'''
+            <div class="score-card" style="border-left: 4px solid {monthly_color};">
+                <div class="label">📅 Monthly Change</div>
+                <div class="value" style="color: {monthly_color}; font-size: 32px;">
+                    {monthly_direction} {'+' if monthly_score_change > 0 else ''}{monthly_score_change}%
+                </div>
+                <div class="detail">Compared to {monthly_changes.get('previous_date', '~30 days ago')}</div>
+                <div class="detail" style="margin-top: 8px;">
+                    Rank: {'↑' if monthly_rank_change > 0 else '↓' if monthly_rank_change < 0 else '→'}{abs(monthly_rank_change)} position{'s' if abs(monthly_rank_change) != 1 else ''}
+                </div>
+            </div>
+'''
+    else:
+        html += '''
+            <div class="score-card" style="border-left: 4px solid var(--text-muted);">
+                <div class="label">📅 Monthly Change</div>
+                <div class="value" style="color: var(--text-secondary); font-size: 24px;">No prior data</div>
+                <div class="detail">Monthly comparison available after 30 days</div>
+            </div>
+'''
+    
+    html += '''
+        </div>
+'''
+    
+    # Add Goals Section if goal_progress is available
+    if goal_progress and goal_progress.get("by_llm"):
+        summary = goal_progress.get("summary", {})
+        achieved = summary.get("achieved", 0)
+        total = summary.get("total", 0)
+        
+        html += f'''
+        <!-- Goals Progress Section -->
+        <div class="section-header">
+            <h2>🎯 Goals Progress</h2>
+            <div class="line"></div>
+        </div>
+        
+        <div class="goals-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div>
+                    <span style="font-size: 14px; color: var(--text-muted);">Goal Achievement:</span>
+                    <span style="font-size: 20px; font-weight: 600; margin-left: 8px; color: var(--accent);">{achieved}/{total} LLMs</span>
+                </div>
+                <div style="display: flex; gap: 16px;">
+                    <span style="color: var(--success);">🟢 {summary.get("achieved", 0)} Achieved</span>
+                    <span style="color: var(--warning);">🟡 {summary.get("in_progress", 0)} In Progress</span>
+                    <span style="color: var(--danger);">🔴 {summary.get("far", 0)} Far</span>
+                </div>
+            </div>
+            
+            <div class="goals-grid">
+'''
+        
+        for llm, data in goal_progress.get("by_llm", {}).items():
+            status = data.get("status", "far")
+            status_label = "✓ Achieved" if status == "achieved" else "In Progress" if status == "in_progress" else "Needs Work"
+            
+            html += f'''
+                <div class="goal-card {status}">
+                    <div class="goal-header">
+                        <span class="goal-llm">{llm}</span>
+                        <span class="goal-status {status}">{status_label}</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill {status}" style="width: {min(100, data.get('progress_percent', 0))}%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-metrics">
+                        <span>Current: <span class="goal-current">{data.get('current', 0)}%</span></span>
+                        <span>Target: {data.get('target', 0)}%</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                        {f"🎉 Goal achieved!" if status == "achieved" else f"📈 {data.get('remaining', 0)}% more to reach goal"}
+                    </div>
+                </div>
+'''
+        
+        html += '''
+            </div>
+        </div>
+'''
+    
+    # Add Monthly Comparison Section if monthly_aggregates is available
+    if monthly_aggregates and len(monthly_aggregates) >= 2:
+        html += '''
+        <!-- Monthly Comparison Section -->
+        <div class="section-header">
+            <h2>📅 Monthly Comparison</h2>
+            <div class="line"></div>
+        </div>
+        
+        <div class="goals-section">
+            <table class="monthly-table">
+                <thead>
+                    <tr>
+                        <th>LLM</th>
+'''
+        
+        # Add month headers
+        for month_data in monthly_aggregates:
+            html += f'                        <th>{month_data["month_display"]}</th>\n'
+        
+        html += '''                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+'''
+        
+        # Get all LLMs from the aggregates
+        all_llms = set()
+        for month_data in monthly_aggregates:
+            all_llms.update(month_data.get("by_llm", {}).keys())
+        
+        # Add rows for each LLM
+        for llm in sorted(all_llms):
+            html += f'                    <tr>\n                        <td style="font-weight: 600;">{llm}</td>\n'
+            
+            values = []
+            for month_data in monthly_aggregates:
+                llm_data = month_data.get("by_llm", {}).get(llm, {})
+                visibility = llm_data.get("avg_visibility_score", 0)
+                mentions = llm_data.get("total_mentions", 0)
+                values.append((visibility, mentions))
+                html += f'                        <td>{visibility}% <span style="color: var(--text-muted); font-size: 12px;">({mentions} mentions)</span></td>\n'
+            
+            # Calculate change between last two months
+            if len(values) >= 2:
+                change = values[-1][0] - values[-2][0]
+                mention_change = values[-1][1] - values[-2][1]
+                change_class = "change-positive" if change > 0 else "change-negative" if change < 0 else "change-neutral"
+                change_arrow = "↑" if change > 0 else "↓" if change < 0 else "→"
+                mention_arrow = "↑" if mention_change > 0 else "↓" if mention_change < 0 else "→"
+                html += f'                        <td class="{change_class}">{change_arrow} {abs(change)}% <span style="font-size: 12px;">({mention_arrow}{abs(mention_change)} mentions)</span></td>\n'
+            else:
+                html += '                        <td class="change-neutral">—</td>\n'
+            
+            html += '                    </tr>\n'
+        
+        # Add overall row
+        html += '                    <tr style="background: var(--bg-primary); font-weight: 600;">\n                        <td>Overall</td>\n'
+        
+        overall_values = []
+        for month_data in monthly_aggregates:
+            overall = month_data.get("overall", {})
+            visibility = overall.get("avg_visibility_score", 0)
+            rank = overall.get("avg_rank", 999)
+            overall_values.append((visibility, rank))
+            html += f'                        <td>{visibility}% <span style="color: var(--text-muted); font-size: 12px;">(Rank #{rank:.0f})</span></td>\n'
+        
+        if len(overall_values) >= 2:
+            change = overall_values[-1][0] - overall_values[-2][0]
+            rank_change = overall_values[-2][1] - overall_values[-1][1]  # Positive = improvement
+            change_class = "change-positive" if change > 0 else "change-negative" if change < 0 else "change-neutral"
+            change_arrow = "↑" if change > 0 else "↓" if change < 0 else "→"
+            rank_arrow = "↑" if rank_change > 0 else "↓" if rank_change < 0 else "→"
+            html += f'                        <td class="{change_class}">{change_arrow} {abs(change)}% <span style="font-size: 12px;">(Rank {rank_arrow}{abs(rank_change):.0f})</span></td>\n'
+        else:
+            html += '                        <td class="change-neutral">—</td>\n'
+        
+        html += '''                    </tr>
+                </tbody>
+            </table>
+        </div>
+'''
+    
+    # Add trend chart if we have historical data
+    if len(trend_data) >= 2:
+        trend_dates = [d["date"] for d in trend_data]
+        trend_scores = [d["visibility_score"] for d in trend_data]
+        trend_ranks = [d["target_rank"] for d in trend_data]
+        
+        html += f'''
+        <!-- Historical Trend Chart -->
+        <div class="section-header">
+            <h2>Visibility Trend (Last 90 Days)</h2>
+            <div class="line"></div>
+        </div>
+        
+        <div class="chart-container" style="margin-bottom: 48px;">
+            <canvas id="trendChart" height="250"></canvas>
+        </div>
+        
+        <script>
+            // Trend Chart
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            new Chart(trendCtx, {{
+                type: 'line',
+                data: {{
+                    labels: {json.dumps(trend_dates)},
+                    datasets: [{{
+                        label: 'Visibility Score (%)',
+                        data: {json.dumps(trend_scores)},
+                        borderColor: '#00ff88',
+                        backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        yAxisID: 'y'
+                    }}, {{
+                        label: 'Rank (lower is better)',
+                        data: {json.dumps(trend_ranks)},
+                        borderColor: '#ffa502',
+                        backgroundColor: 'rgba(255, 165, 2, 0.1)',
+                        fill: false,
+                        tension: 0.3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        yAxisID: 'y1'
+                    }}]
+                }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {{
+                        mode: 'index',
+                        intersect: false,
+                    }},
+                    plugins: {{
+                        legend: {{
+                            labels: {{ color: '#8b8b9e', font: {{ family: "'Space Grotesk'" }} }}
+                        }},
+                        tooltip: {{
+                            backgroundColor: '#1a1a24',
+                            titleColor: '#fff',
+                            bodyColor: '#8b8b9e',
+                            borderColor: '#2a2a3a',
+                            borderWidth: 1
+                        }}
+                    }},
+                    scales: {{
+                        x: {{
+                            grid: {{ color: '#2a2a3a' }},
+                            ticks: {{ color: '#8b8b9e' }}
+                        }},
+                        y: {{
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            min: 0,
+                            max: 100,
+                            grid: {{ color: '#2a2a3a' }},
+                            ticks: {{ 
+                                color: '#00ff88',
+                                callback: function(value) {{ return value + '%'; }}
+                            }},
+                            title: {{
+                                display: true,
+                                text: 'Visibility Score',
+                                color: '#00ff88'
+                            }}
+                        }},
+                        y1: {{
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            reverse: true,
+                            min: 1,
+                            grid: {{ drawOnChartArea: false }},
+                            ticks: {{ 
+                                color: '#ffa502',
+                                callback: function(value) {{ return '#' + value; }}
+                            }},
+                            title: {{
+                                display: true,
+                                text: 'Rank',
+                                color: '#ffa502'
+                            }}
+                        }}
+                    }}
+                }}
+            }});
+        </script>
+'''
+    
+    html += '''
         <!-- LLM Comparison -->
         <div class="section-header">
             <h2>Performance by LLM</h2>
@@ -1553,11 +2423,12 @@ def capture_screenshot(html_file: str, output_png: str) -> bool:
 # HISTORICAL COMPARISON
 # ============================================================================
 
-def calculate_changes(current_analysis: dict, previous_data: dict) -> dict:
-    """Calculate week-over-week changes in metrics."""
+def calculate_changes(current_analysis: dict, previous_data: dict, period_label: str = "week") -> dict:
+    """Calculate changes in metrics compared to previous data."""
     changes = {
         "has_previous": False,
         "previous_date": None,
+        "period": period_label,
         "overall": {},
         "by_llm": {},
         "summary": []
@@ -1608,13 +2479,15 @@ def calculate_changes(current_analysis: dict, previous_data: dict) -> dict:
             "direction": "up" if llm_change > 0 else "down" if llm_change < 0 else "same"
         }
     
-    # Generate summary
+    # Generate summary based on period
+    period_text = "this week" if period_label == "week" else "this month"
+    
     if score_change > 0:
-        changes["summary"].append(f"📈 Overall visibility improved by {score_change}%")
+        changes["summary"].append(f"📈 Visibility improved by {score_change}% {period_text}")
     elif score_change < 0:
-        changes["summary"].append(f"📉 Overall visibility decreased by {abs(score_change)}%")
+        changes["summary"].append(f"📉 Visibility decreased by {abs(score_change)}% {period_text}")
     else:
-        changes["summary"].append("➡️ Overall visibility unchanged")
+        changes["summary"].append(f"➡️ Visibility unchanged {period_text}")
     
     if rank_change > 0:
         changes["summary"].append(f"🏆 Ranking improved by {rank_change} position(s)")
@@ -1628,11 +2501,15 @@ def calculate_changes(current_analysis: dict, previous_data: dict) -> dict:
 # EMAIL NOTIFICATIONS
 # ============================================================================
 
-def send_email_notification(analysis: dict, changes: dict, screenshot_path: str = None, dashboard_path: str = None) -> bool:
-    """Send email notification with audit summary."""
+def send_email_notification(analysis: dict, weekly_changes: dict, monthly_changes: dict = None, screenshot_path: str = None, dashboard_path: str = None, goal_progress: dict = None) -> bool:
+    """Send email notification with audit summary including weekly and monthly changes and goals."""
     if not EMAIL_ENABLED:
         logger.info("📧 Email notifications disabled (no credentials configured)")
         return False
+    
+    # For backward compatibility
+    monthly_changes = monthly_changes or {}
+    goal_progress = goal_progress or {}
     
     try:
         logger.info(f"📧 Sending email notification to {EMAIL_TO}...")
@@ -1656,37 +2533,89 @@ def send_email_notification(analysis: dict, changes: dict, screenshot_path: str 
         else:
             score_color = "#ff4757"
         
-        # Build change indicators
+        # Build change indicators (weekly)
         change_html = ""
-        if changes.get("has_previous"):
+        if weekly_changes.get("has_previous"):
+            weekly_score_change = weekly_changes.get("overall", {}).get("visibility_score", {}).get("change", 0)
+            weekly_color = "#00ff88" if weekly_score_change > 0 else "#ff4757" if weekly_score_change < 0 else "#8b8b9e"
+            
             change_html = f"""
-            <div style="background: #1a1a24; border-radius: 8px; padding: 16px; margin: 16px 0;">
-                <h3 style="color: #8b8b9e; margin: 0 0 12px 0; font-size: 14px;">📊 WEEK-OVER-WEEK CHANGES</h3>
-                <p style="color: #aaa; margin: 4px 0;">Compared to: {changes['previous_date']}</p>
+            <div style="background: #1a1a24; border-radius: 8px; padding: 16px; margin: 16px 0; border-left: 4px solid {weekly_color};">
+                <h3 style="color: #8b8b9e; margin: 0 0 12px 0; font-size: 14px;">📊 WEEKLY CHANGES</h3>
+                <p style="color: #aaa; margin: 4px 0;">Compared to: {weekly_changes['previous_date']}</p>
             """
-            for summary_item in changes.get("summary", []):
+            for summary_item in weekly_changes.get("summary", []):
+                change_html += f'<p style="color: #fff; margin: 8px 0;">{summary_item}</p>'
+            change_html += "</div>"
+        
+        # Build monthly change indicators
+        if monthly_changes.get("has_previous"):
+            monthly_score_change = monthly_changes.get("overall", {}).get("visibility_score", {}).get("change", 0)
+            monthly_color = "#00ff88" if monthly_score_change > 0 else "#ff4757" if monthly_score_change < 0 else "#8b8b9e"
+            
+            change_html += f"""
+            <div style="background: #1a1a24; border-radius: 8px; padding: 16px; margin: 16px 0; border-left: 4px solid {monthly_color};">
+                <h3 style="color: #8b8b9e; margin: 0 0 12px 0; font-size: 14px;">📅 MONTHLY CHANGES</h3>
+                <p style="color: #aaa; margin: 4px 0;">Compared to: {monthly_changes['previous_date']}</p>
+            """
+            for summary_item in monthly_changes.get("summary", []):
                 change_html += f'<p style="color: #fff; margin: 8px 0;">{summary_item}</p>'
             change_html += "</div>"
         
         # Build LLM breakdown
         llm_rows = ""
         for llm, data in analysis.get("by_llm", {}).items():
-            llm_change = changes.get("by_llm", {}).get(llm, {})
-            change_indicator = ""
-            if llm_change:
-                if llm_change["direction"] == "up":
-                    change_indicator = f'<span style="color: #00ff88;">↑{llm_change["change"]}%</span>'
-                elif llm_change["direction"] == "down":
-                    change_indicator = f'<span style="color: #ff4757;">↓{abs(llm_change["change"])}%</span>'
+            llm_weekly_change = weekly_changes.get("by_llm", {}).get(llm, {})
+            llm_monthly_change = monthly_changes.get("by_llm", {}).get(llm, {})
+            
+            weekly_indicator = ""
+            if llm_weekly_change:
+                if llm_weekly_change["direction"] == "up":
+                    weekly_indicator = f'<span style="color: #00ff88;">↑{llm_weekly_change["change"]}%</span>'
+                elif llm_weekly_change["direction"] == "down":
+                    weekly_indicator = f'<span style="color: #ff4757;">↓{abs(llm_weekly_change["change"])}%</span>'
+            
+            monthly_indicator = ""
+            if llm_monthly_change:
+                if llm_monthly_change["direction"] == "up":
+                    monthly_indicator = f'<span style="color: #00ff88;">↑{llm_monthly_change["change"]}%</span>'
+                elif llm_monthly_change["direction"] == "down":
+                    monthly_indicator = f'<span style="color: #ff4757;">↓{abs(llm_monthly_change["change"])}%</span>'
             
             llm_rows += f"""
             <tr>
                 <td style="padding: 12px; border-bottom: 1px solid #2a2a3a; color: #fff;">{llm}</td>
                 <td style="padding: 12px; border-bottom: 1px solid #2a2a3a; color: #00ff88;">{data['visibility_score']}%</td>
                 <td style="padding: 12px; border-bottom: 1px solid #2a2a3a;">{data['mentions']}/{data['queries']}</td>
-                <td style="padding: 12px; border-bottom: 1px solid #2a2a3a;">{change_indicator}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #2a2a3a;">{weekly_indicator}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #2a2a3a;">{monthly_indicator}</td>
             </tr>
             """
+        
+        # Goals progress
+        goals_html = ""
+        if goal_progress and goal_progress.get("by_llm"):
+            summary = goal_progress.get("summary", {})
+            achieved = summary.get("achieved", 0)
+            total = summary.get("total", 0)
+            
+            goals_html = f"""
+            <div style="background: #1a1a24; border-radius: 8px; padding: 16px; margin: 16px 0; border-left: 4px solid #00ff88;">
+                <h3 style="color: #8b8b9e; margin: 0 0 12px 0; font-size: 14px;">🎯 GOALS PROGRESS ({achieved}/{total} Achieved)</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+            """
+            for llm, data in goal_progress.get("by_llm", {}).items():
+                status = data.get("status", "far")
+                status_icon = "✅" if status == "achieved" else "🟡" if status == "in_progress" else "🔴"
+                status_color = "#00ff88" if status == "achieved" else "#ffa502" if status == "in_progress" else "#ff4757"
+                goals_html += f"""
+                <tr>
+                    <td style="padding: 8px; color: #fff;">{status_icon} {llm}</td>
+                    <td style="padding: 8px; color: {status_color}; text-align: right;">{data.get('current', 0)}% / {data.get('target', 0)}%</td>
+                    <td style="padding: 8px; color: #8b8b9e; text-align: right;">{data.get('progress_percent', 0)}%</td>
+                </tr>
+                """
+            goals_html += "</table></div>"
         
         # Weak spots
         weak_spots_html = ""
@@ -1731,13 +2660,16 @@ def send_email_notification(analysis: dict, changes: dict, screenshot_path: str 
                             <th style="padding: 12px; text-align: left; color: #8b8b9e; font-size: 12px;">LLM</th>
                             <th style="padding: 12px; text-align: left; color: #8b8b9e; font-size: 12px;">VISIBILITY</th>
                             <th style="padding: 12px; text-align: left; color: #8b8b9e; font-size: 12px;">MENTIONS</th>
-                            <th style="padding: 12px; text-align: left; color: #8b8b9e; font-size: 12px;">CHANGE</th>
+                            <th style="padding: 12px; text-align: left; color: #8b8b9e; font-size: 12px;">WEEKLY</th>
+                            <th style="padding: 12px; text-align: left; color: #8b8b9e; font-size: 12px;">MONTHLY</th>
                         </tr>
                     </thead>
                     <tbody>
                         {llm_rows}
                     </tbody>
                 </table>
+                
+                {goals_html}
                 
                 {weak_spots_html}
                 
@@ -1951,10 +2883,20 @@ def main():
     logger.info(f"Archive Retention: {ARCHIVE_RETENTION_WEEKS} weeks")
     logger.info(f"Email Notifications: {'Enabled' if EMAIL_ENABLED else 'Disabled'}")
     
-    # Get previous results for comparison
+    # Get previous results for weekly comparison
     previous_data = get_previous_results()
     if previous_data:
         logger.info(f"📊 Found previous audit from {previous_data.get('_archive_date', 'unknown date')}")
+    
+    # Get monthly data for monthly comparison
+    monthly_data = get_monthly_results()
+    if monthly_data:
+        logger.info(f"📅 Found monthly comparison data from {monthly_data.get('_archive_date', 'unknown date')}")
+    
+    # Get historical trend data (last 90 days)
+    trend_data = get_historical_trend(days=90)
+    if trend_data:
+        logger.info(f"📈 Found {len(trend_data)} historical data points for trend analysis")
     
     # Run audit
     try:
@@ -1972,8 +2914,21 @@ def main():
     logger.info("📊 Analyzing results...")
     analysis = analyze_results(results)
     
-    # Calculate changes from previous run
-    changes = calculate_changes(analysis, previous_data)
+    # Calculate weekly changes
+    weekly_changes = calculate_changes(analysis, previous_data, period_label="week")
+    
+    # Calculate monthly changes
+    monthly_changes = calculate_changes(analysis, monthly_data, period_label="month")
+    
+    # Calculate goal progress
+    logger.info("🎯 Calculating goal progress...")
+    goal_progress = calculate_goal_progress(analysis)
+    
+    # Get monthly aggregates for comparison (last 3 months)
+    logger.info(f"📅 Getting monthly aggregates (last {MONTHS_TO_COMPARE} months)...")
+    monthly_aggregates = get_monthly_aggregates(months=MONTHS_TO_COMPARE)
+    if monthly_aggregates:
+        logger.info(f"📊 Found {len(monthly_aggregates)} months of historical data for comparison")
     
     # Create timestamp for this run
     timestamp = get_timestamp()
@@ -1983,7 +2938,7 @@ def main():
     results_file = "audit_results.json"
     archive_results_file = f"{ARCHIVE_DIR}/audit_results_{timestamp}.json"
     
-    results_data = {"analysis": analysis, "raw_results": results}
+    results_data = {"analysis": analysis, "raw_results": results, "goal_progress": goal_progress}
     
     with open(results_file, "w") as f:
         json.dump(results_data, f, indent=2)
@@ -1991,9 +2946,17 @@ def main():
     logger.info(f"✅ Results saved to {results_file}")
     logger.info(f"📁 Archived to {archive_results_file}")
     
-    # Generate dashboard
+    # Generate dashboard with weekly, monthly changes, trend data, goals, and monthly comparison
     logger.info("🎨 Generating HTML dashboard...")
-    dashboard_html = generate_html_dashboard(analysis, results)
+    dashboard_html = generate_html_dashboard(
+        analysis, 
+        results, 
+        weekly_changes=weekly_changes,
+        monthly_changes=monthly_changes,
+        trend_data=trend_data,
+        goal_progress=goal_progress,
+        monthly_aggregates=monthly_aggregates
+    )
     
     dashboard_file = "visibility_dashboard.html"
     archive_dashboard_file = f"{ARCHIVE_DIR}/visibility_dashboard_{timestamp}.html"
@@ -2024,31 +2987,61 @@ def main():
     logger.info(f"🎯 Overall Visibility Score: {analysis['overall']['visibility_score']}%")
     logger.info(f"🏆 Overall Ranking: #{analysis['overall']['target_rank']} of {analysis['overall']['total_companies_mentioned']}")
     
-    # Show changes if available
-    if changes.get("has_previous"):
-        logger.info(f"\n📊 Changes since {changes['previous_date']}:")
-        for summary in changes.get("summary", []):
+    # Show goal progress
+    if goal_progress and goal_progress.get("by_llm"):
+        summary = goal_progress.get("summary", {})
+        logger.info(f"\n🎯 GOALS PROGRESS: {summary.get('achieved', 0)}/{summary.get('total', 0)} LLMs achieved target")
+        logger.info("   " + "-"*50)
+        for llm, data in goal_progress.get("by_llm", {}).items():
+            status_icon = "✅" if data["status"] == "achieved" else "🟡" if data["status"] == "in_progress" else "🔴"
+            logger.info(f"   {status_icon} {llm}: {data['current']}% / {data['target']}% target ({data['progress_percent']}% progress)")
+    
+    # Show weekly changes if available
+    if weekly_changes.get("has_previous"):
+        logger.info(f"\n📊 Weekly Changes (since {weekly_changes['previous_date']}):")
+        for summary in weekly_changes.get("summary", []):
             logger.info(f"   {summary}")
+    
+    # Show monthly changes if available
+    if monthly_changes.get("has_previous"):
+        logger.info(f"\n📅 Monthly Changes (since {monthly_changes['previous_date']}):")
+        for summary in monthly_changes.get("summary", []):
+            logger.info(f"   {summary}")
+    
+    # Show monthly comparison if available
+    if monthly_aggregates and len(monthly_aggregates) >= 2:
+        logger.info(f"\n📅 Monthly Comparison ({len(monthly_aggregates)} months):")
+        for month_data in monthly_aggregates:
+            logger.info(f"   {month_data['month_display']}: {month_data['overall']['avg_visibility_score']}% visibility (Rank #{month_data['overall']['avg_rank']:.0f})")
     
     logger.info("\n📊 By LLM:")
     for llm, data in analysis["by_llm"].items():
         change_str = ""
-        if changes.get("by_llm", {}).get(llm):
-            llm_change = changes["by_llm"][llm]
+        goal_str = ""
+        # Show weekly change
+        if weekly_changes.get("by_llm", {}).get(llm):
+            llm_change = weekly_changes["by_llm"][llm]
             if llm_change["direction"] == "up":
-                change_str = f" (↑{llm_change['change']}%)"
+                change_str = f" (↑{llm_change['change']}% this week)"
             elif llm_change["direction"] == "down":
-                change_str = f" (↓{abs(llm_change['change'])}%)"
-        logger.info(f"   {llm}: {data['visibility_score']}%{change_str} ({data['mentions']}/{data['queries']} queries)")
+                change_str = f" (↓{abs(llm_change['change'])}% this week)"
+        # Show goal status
+        if goal_progress and goal_progress.get("by_llm", {}).get(llm):
+            llm_goal = goal_progress["by_llm"][llm]
+            if llm_goal["status"] == "achieved":
+                goal_str = " ✅"
+            elif llm_goal["status"] == "in_progress":
+                goal_str = f" 🎯{llm_goal['remaining']}% to goal"
+        logger.info(f"   {llm}: {data['visibility_score']}%{change_str}{goal_str} ({data['mentions']}/{data['queries']} queries)")
     
     if analysis["weak_spots"]:
         logger.info("\n⚠️  Weak Spots:")
         for spot in analysis["weak_spots"]:
             logger.info(f"   - {spot['intent']}: {spot['visibility']}%")
     
-    # Send email notification
+    # Send email notification with both weekly and monthly changes
     if not args.no_email and EMAIL_ENABLED:
-        send_email_notification(analysis, changes, screenshot_file, dashboard_file)
+        send_email_notification(analysis, weekly_changes, monthly_changes, screenshot_file, dashboard_file, goal_progress)
     
     logger.info("\n✅ Audit complete!")
     logger.info(f"   Dashboard: {dashboard_file}")

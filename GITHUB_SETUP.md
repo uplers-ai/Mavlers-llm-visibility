@@ -153,13 +153,13 @@ llm-visibility-audit/
 
 ## 🔗 Custom Domain (Optional)
 
-To use a custom domain like `visibility.uplers.com`:
+To use a custom domain like `visibility.mavlers.com`:
 
 1. Go to repo **Settings** → **Pages**
-2. Under **Custom domain**, enter `visibility.uplers.com`
+2. Under **Custom domain**, enter `visibility.mavlers.com`
 3. Add a CNAME record in your DNS:
    ```
-   visibility.uplers.com → YOUR_USERNAME.github.io
+   visibility.mavlers.com → YOUR_USERNAME.github.io
    ```
 
 ---

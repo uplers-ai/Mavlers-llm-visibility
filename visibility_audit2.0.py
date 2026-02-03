@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-LLM Visibility Audit Tool for Uplers
+LLM Visibility Audit Tool for Mavlers
 =====================================
-Measures brand visibility for Uplers (AI-powered talent platform connecting 
-global companies with pre-vetted developers from India) across multiple LLMs:
+Measures brand visibility for Mavlers (lifecycle digital marketing agency 
+offering white-label services for SEO, PPC, email marketing, and analytics) 
+across multiple LLMs:
 - ChatGPT (OpenAI)
 - Claude (Anthropic)
 - Gemini (Google)
@@ -11,7 +12,7 @@ global companies with pre-vetted developers from India) across multiple LLMs:
 - Perplexity
 
 Features:
-- Runs 50 prompts across 10 intent categories, 3x each for statistical reliability
+- Runs prompts across intent categories, 3x each for statistical reliability
 - Generates HTML dashboard with visibility scores and competitor rankings
 - Automatic screenshot capture of dashboard
 - Email notifications with summary
@@ -98,7 +99,7 @@ perplexity_api_key = None
 # ============================================================================
 # CONFIGURATION
 # ============================================================================
-TARGET_COMPANY = "Uplers"
+TARGET_COMPANY = "Mavlers"
 TARGET_REGION = "USA"
 RUNS_PER_PROMPT = 3
 
@@ -151,86 +152,43 @@ GOALS = {
 MONTHS_TO_COMPARE = 3  # Compare last 3 months
 
 # Known platform patterns to help with detection (will also find new ones dynamically)
+# Mavlers competitors: White-label/fulfillment + US performance/full-service agencies
 KNOWN_PLATFORMS = [
-    "Uplers", "Toptal", "Turing", "Andela", "Arc", "CloudDevs", 
-    "Terminal", "Gun.io", "Lemon.io", "BairesDev", "Revelo",
-    "Supersourcing", "Gigster", "Multiplier", "Remote", "Deel", 
-    "Oyster", "Globalization Partners", "Fiverr", "Upwork", "Freelancer",
-    "LinkedIn", "Indeed", "Hired", "Triplebyte", "Vettery", "Crossover",
-    "X-Team", "Scalable Path", "Codementor", "RemoteOK", "We Work Remotely",
-    "AngelList", "Stack Overflow", "GitHub Jobs", "Dice", "Naukri",
-    "TalentScale", "Flexiple", "RemotePanda", "HackerRank", "CodeSignal"
+    # Target company
+    "Mavlers",
+    # White-label / fulfillment competitors
+    "DashClicks", "Vendasta", "That! Company", "The HOTH",
+    # US performance / full-service agency competitors
+    "WebFX", "Ignite Visibility", "Disruptive Advertising", "KlientBoost",
+    # Other common digital marketing agencies
+    "Neil Patel Digital", "Thrive Internet Marketing", "SmartSites", "Straight North",
+    "Single Grain", "Power Digital Marketing", "Directive", "Wpromote",
+    "Tinuiti", "Merkle", "iProspect", "Jellyfish", "Dentsu", "Publicis",
+    "Omnicom", "WPP", "Havas", "IPG", "Accenture Interactive",
+    # Email marketing specialists
+    "Inbox Army", "Email Uplers", "Litmus", "Mailchimp", "Klaviyo",
+    "Braze", "Salesforce Marketing Cloud", "HubSpot", "Marketo", "ActiveCampaign",
+    # SEO agencies
+    "Searchbloom", "Victorious", "OuterBox", "SEO Inc", "HigherVisibility",
+    # PPC agencies  
+    "Logical Position", "JumpFly", "AdVenture Media", "Hanapin Marketing",
 ]
 
-# Intent categories with prompts
+# Intent categories with prompts for Mavlers (digital marketing agency)
 PROMPTS_BY_INTENT = {
-    "Top Platforms for Indian Developers": [
-        "What are the top platforms for tech companies to hire vetted Indian software engineers?",
-        "Best platform to hire Indian developers",
-        "What is the best platform to hire Indian developers",
-        "Top talent platforms India comparison",
-        "Where can I find vetted Indian software engineers",
+    "Agency / Partner Intent (White-Label, Outsourcing, Fulfillment)": [
+        "Best white label digital marketing agency in the USA for agencies (SEO, PPC, email).",
+        "Top white label PPC providers in the USA for Google Ads and Performance Max management.",
+        "Best white label email marketing agency for agencies in the USA (Klaviyo, Braze, SFMC).",
+        "Which agency offers dedicated offshore / extended marketing teams for US agencies with account managers?",
+        "Best white label link building / guest posting partner for US agencies (quality + process).",
     ],
-    "Competitors and Comparisons": [
-        "Who are the top competitors in hiring vetted software engineers from India for tech companies?",
-        "Who are the top competitors in AI-driven recruitment for tech companies hiring vetted software engineers and marketing talent from India?",
-    ],
-    "AI-Driven Recruitment": [
-        "AI-driven recruitment platform to hire Software Engineers",
-        "AI-driven recruitment platform to hire remote Engineers",
-        "AI-powered hiring platform",
-        "AI Vetted Indian tech talent",
-    ],
-    "Hiring Managers Multi-Role": [
-        "What are the top platforms for hiring managers looking to recruit vetted Indian software engineers and marketing professionals?",
-    ],
-    "How to Hire from India": [
-        "How to hire developers from India",
-        "How to find vetted developers India",
-        "How to hire remote developers quickly",
-        "Steps to hire offshore developers",
-        "How to interview Indian developers",
-        "Who can help me hire remote developers from India",
-    ],
-    "Direct Hiring Queries": [
-        "Hire software engineers from India",
-        "Hire remote developers India",
-        "Hire full stack developers India",
-        "Hire AI/ML engineers India",
-        "Hire data scientists India",
-        "Hire DevOps engineers India",
-        "Hire QA engineers India",
-        "Hire solutions architects India",
-        "Hire marketing professionals India",
-        "Vetted Indian developers",
-    ],
-    "Talent Platform for Tech Companies": [
-        "Talent platform for tech companies",
-        "Hire developers for SaaS companies",
-        "Hire engineers for Startup companies",
-        "Hire Engineers for Tech Startups",
-        "Tech talent for startups",
-        "Indian talent for global companies",
-    ],
-    "Cost and Budget": [
-        "Cost of hiring developers from India",
-        "Budget-friendly tech hiring",
-        "How much does it cost to hire a developer from India",
-        "India salary guide for tech hiring",
-    ],
-    "Fast Hiring Process": [
-        "Fast hiring process for developers",
-        "How to hire remote developers quickly",
-    ],
-    "Vetting Process": [
-        "Vetting process for Indian developers",
-        "Where can I find vetted Indian software engineers",
-    ],
-    "Hiring Models": [
-        "Staff augmentation services India",
-        "Flexible hiring models India",
-        "Contract to hire developers India",
-        "Full time hiring platforms",
+    "Direct Brand Intent (Buyers Hiring Mavlers Directly)": [
+        "Top lifecycle marketing agencies in the USA for email + marketing automation + retention.",
+        "Best B2B email marketing agency in the USA for SFMC / Marketo / HubSpot execution support.",
+        "Best SEO agency in the USA that uses automation/programmatic/edge SEO for scale.",
+        "Ecommerce PPC management agency USA for Shopping + PMax + YouTube performance.",
+        "Best Google Analytics / GA4 consulting partner in the USA for implementation and reporting (agency support).",
     ],
 }
 
@@ -905,74 +863,86 @@ def extract_companies(text: str) -> dict:
     text_lower = text.lower()
     
     # 1. First check known platforms with variations
+    # Mavlers and competitors in digital marketing space
     platform_variations = {
-        "Uplers": ["uplers", "uplers.com", "uplers AI hiring platform", "uplers ai", "uplers platform", "uplers talent"],
-        "Toptal": ["toptal", "toptal.com"],
-        "Turing": ["turing", "turing.com"],
-        "Andela": ["andela", "andela.com"],
-        "Arc": ["arc.dev", "arc dev"],
-        "CloudDevs": ["clouddevs", "cloud devs", "clouddevs.com"],
-        "Terminal": ["terminal.io", "terminal io"],
-        "Gun.io": ["gun.io", "gun io", "gunio"],
-        "Lemon.io": ["lemon.io", "lemon io", "lemonpicker"],
-        "BairesDev": ["bairesdev", "baires dev", "bairesdev.com"],
-        "Revelo": ["revelo", "revelo.com"],
-        "Supersourcing": ["supersourcing", "super sourcing"],
-        "Gigster": ["gigster", "gigster.com"],
-        "Multiplier": ["multiplier", "multiplier.com"],
-        "Remote": ["remote.com", "remote.co"],
-        "Deel": ["deel", "deel.com"],
-        "Oyster": ["oyster", "oysterhr", "oyster hr"],
-        "Globalization Partners": ["globalization partners", "g-p.com", "g-p"],
+        # Target company - Mavlers with all variations
+        "Mavlers": [
+            "mavlers", "mavlers.com", "mavlers agency",
+            "mavlers lifecycle digital marketing agency", "lifecycle digital marketing agency mavlers",
+            "mavlers white label", "mavlers white label services", "mavlers white label marketing",
+            "mavlers formerly email monks", "email monks", "emailmonks",
+            "mavlers san jose", "mavlers california", "mavlers usa",
+        ],
+        
+        # White-label / fulfillment competitors
+        "DashClicks": ["dashclicks", "dashclicks.com", "dash clicks"],
+        "Vendasta": ["vendasta", "vendasta.com"],
+        "That! Company": ["that! company", "that company", "thatcompany.com", "thatcompany"],
+        "The HOTH": ["the hoth", "thehoth", "thehoth.com", "hoth"],
+        
+        # US performance / full-service agency competitors
+        "WebFX": ["webfx", "webfx.com", "web fx"],
+        "Ignite Visibility": ["ignite visibility", "ignitevisibility", "ignitevisibility.com"],
+        "Disruptive Advertising": ["disruptive advertising", "disruptiveadvertising", "disruptiveadvertising.com"],
+        "KlientBoost": ["klientboost", "klientboost.com", "klient boost"],
+        
+        # Other digital marketing agencies
+        "Neil Patel Digital": ["neil patel digital", "neilpateldigital", "npdigital", "neil patel agency"],
+        "Thrive Internet Marketing": ["thrive internet marketing", "thrive agency", "thriveagency"],
+        "SmartSites": ["smartsites", "smartsites.com", "smart sites"],
+        "Straight North": ["straight north", "straightnorth", "straightnorth.com"],
+        "Single Grain": ["single grain", "singlegrain", "singlegrain.com"],
+        "Power Digital Marketing": ["power digital", "power digital marketing", "powerdigitalmarketing"],
+        "Directive": ["directive", "directive.com", "directive consulting"],
+        "Wpromote": ["wpromote", "wpromote.com"],
+        "Tinuiti": ["tinuiti", "tinuiti.com"],
+        "Merkle": ["merkle", "merkle.com", "merkle agency"],
+        "iProspect": ["iprospect", "iprospect.com"],
+        "Jellyfish": ["jellyfish", "jellyfish.com", "jellyfish agency"],
+        
+        # Big holding companies
+        "Dentsu": ["dentsu", "dentsu.com"],
+        "Publicis": ["publicis", "publicis groupe", "publicis.com"],
+        "Omnicom": ["omnicom", "omnicom group"],
+        "WPP": ["wpp", "wpp.com"],
+        "Havas": ["havas", "havas.com"],
+        "IPG": ["ipg", "interpublic", "interpublic group"],
+        "Accenture Interactive": ["accenture interactive", "accenture song"],
+        
+        # Email marketing specialists
+        "Inbox Army": ["inbox army", "inboxarmy", "inboxarmy.com"],
+        "Email Uplers": ["email uplers", "emailuplers"],
+        "Litmus": ["litmus", "litmus.com"],
+        "Mailchimp": ["mailchimp", "mailchimp.com"],
+        "Klaviyo": ["klaviyo", "klaviyo.com"],
+        "Braze": ["braze", "braze.com"],
+        "Salesforce Marketing Cloud": ["salesforce marketing cloud", "sfmc", "marketing cloud"],
+        "HubSpot": ["hubspot", "hubspot.com"],
+        "Marketo": ["marketo", "marketo.com", "adobe marketo"],
+        "ActiveCampaign": ["activecampaign", "activecampaign.com", "active campaign"],
+        
+        # SEO agencies
+        "Searchbloom": ["searchbloom", "searchbloom.com", "search bloom"],
+        "Victorious": ["victorious", "victorious.com", "victorious seo"],
+        "OuterBox": ["outerbox", "outerbox.com", "outer box"],
+        "SEO Inc": ["seo inc", "seoinc", "seoinc.com"],
+        "HigherVisibility": ["highervisibility", "higher visibility", "highervisibility.com"],
+        
+        # PPC agencies
+        "Logical Position": ["logical position", "logicalposition", "logicalposition.com"],
+        "JumpFly": ["jumpfly", "jumpfly.com", "jump fly"],
+        "AdVenture Media": ["adventure media", "adventuremedia", "adventure media group"],
+        "Hanapin Marketing": ["hanapin", "hanapin marketing"],
+        
+        # Analytics platforms/agencies
+        "Google Analytics": ["google analytics", "ga4"],
+        "Adobe Analytics": ["adobe analytics"],
+        "Mixpanel": ["mixpanel"],
+        "Amplitude": ["amplitude"],
+        
+        # Freelance/marketplace platforms (for context)
         "Fiverr": ["fiverr", "fiverr.com"],
         "Upwork": ["upwork", "upwork.com"],
-        "Freelancer": ["freelancer.com", "freelancer.in"],
-        "LinkedIn": ["linkedin", "linkedin.com"],
-        "Indeed": ["indeed", "indeed.com"],
-        "Hired": ["hired.com", "hired platform"],
-        "Triplebyte": ["triplebyte"],
-        "Vettery": ["vettery"],
-        "Crossover": ["crossover", "crossover.com"],
-        "X-Team": ["x-team", "xteam"],
-        "Scalable Path": ["scalable path", "scalablepath"],
-        "Codementor": ["codementor", "codementorx"],
-        "RemoteOK": ["remoteok", "remote ok"],
-        "We Work Remotely": ["we work remotely", "weworkremotely"],
-        "AngelList": ["angellist", "angel list", "wellfound"],
-        "Stack Overflow Jobs": ["stack overflow jobs", "stackoverflow jobs"],
-        "GitHub Jobs": ["github jobs"],
-        "Dice": ["dice.com"],
-        "Naukri": ["naukri", "naukri.com"],
-        "TalentScale": ["talentscale", "talent scale"],
-        "Flexiple": ["flexiple"],
-        "RemotePanda": ["remotepanda", "remote panda"],
-        "HackerRank": ["hackerrank", "hacker rank"],
-        "CodeSignal": ["codesignal", "code signal"],
-        "Karat": ["karat"],
-        "Wework": ["wework"],
-        "Talent500": ["talent500", "talent 500"],
-        "Pesto": ["pesto.tech", "pesto tech"],
-        "GeeksforGeeks": ["geeksforgeeks", "gfg jobs"],
-        "Instahyre": ["instahyre"],
-        "Hirect": ["hirect"],
-        "Cutshort": ["cutshort"],
-        "Hirist": ["hirist"],
-        "iimjobs": ["iimjobs"],
-        "Freshersworld": ["freshersworld"],
-        "Shine": ["shine.com"],
-        "Monster": ["monster.com", "monster india"],
-        "Glassdoor": ["glassdoor"],
-        "ZipRecruiter": ["ziprecruiter", "zip recruiter"],
-        "SimplyHired": ["simplyhired", "simply hired"],
-        "CareerBuilder": ["careerbuilder", "career builder"],
-        "Snaphunt": ["snaphunt"],
-        "Workable": ["workable"],
-        "Lever": ["lever.co", "lever hiring"],
-        "Greenhouse": ["greenhouse.io", "greenhouse"],
-        "Recruiterflow": ["recruiterflow"],
-        "Zoho Recruit": ["zoho recruit"],
-        "Bamboo HR": ["bamboohr", "bamboo hr"],
-        "JazzHR": ["jazzhr", "jazz hr"],
     }
     
     for platform, patterns in platform_variations.items():
@@ -1003,7 +973,7 @@ def extract_companies(text: str) -> dict:
             if not already_counted:
                 mentions[url] = 1
     
-    # 3. Look for numbered list items that might be platform names (e.g., "1. Toptal", "- Uplers")
+    # 3. Look for numbered list items that might be platform names (e.g., "1. WebFX", "- Mavlers")
     list_patterns = re.findall(r'(?:^|\n)\s*(?:\d+[\.\)]\s*|[-•*]\s*)([A-Z][a-zA-Z0-9\.\-]+(?:\s+[A-Z][a-zA-Z0-9\.\-]+)?)', text)
     for item in list_patterns:
         item_clean = item.strip()
@@ -1081,7 +1051,7 @@ def run_single_query(llm_name: str, prompt: str, intent: str, run_num: int):
 def run_audit():
     """Run the complete visibility audit."""
     print("\n" + "="*60)
-    print("🔍 LLM VISIBILITY AUDIT FOR UPLERS")
+    print("🔍 LLM VISIBILITY AUDIT FOR MAVLERS")
     print("="*60)
     
     # Initialize clients

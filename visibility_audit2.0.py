@@ -27,7 +27,7 @@ Usage:
     python visibility_audit2.0.py --setup-cron      # Show cron setup instructions
 
 Requirements:
-    pip install openai anthropic google-generativeai requests python-dotenv playwright --break-system-packages
+    pip install openai anthropic google-genai requests python-dotenv playwright
     playwright install chromium
 
 Environment Variables (set in .env file or export):
@@ -92,7 +92,8 @@ logger = logging.getLogger(__name__)
 # API Clients (will be initialized after checking keys)
 openai_client = None
 anthropic_client = None
-gemini_model = None
+genai_client = None   # Google GenAI SDK (google.genai) client
+gemini_config = None  # Config for Gemini generate_content (safety, system_instruction, etc.)
 xai_api_key = None
 perplexity_api_key = None
 
@@ -639,41 +640,36 @@ def initialize_clients():
     elif os.getenv("ANTHROPIC_API_KEY") and not ENABLE_CLAUDE:
         logger.info("⏭️  Claude disabled (ENABLE_CLAUDE=false)")
     
-    # Google (Gemini)
+    # Google (Gemini) - uses google.genai SDK (not legacy google.generativeai)
     if os.getenv("GOOGLE_API_KEY") and ENABLE_GEMINI:
         try:
-            import google.generativeai as genai
-            from google.generativeai.types import HarmCategory, HarmBlockThreshold
-            
-            genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-            
+            from google import genai
+            from google.genai import types
+
+            global genai_client, gemini_config
+            genai_client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+
             # Disable all safety filters to prevent business/entity queries from being blocked
-            safety_settings = {
-                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
-                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
-                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
-            }
+            safety_settings = [
+                types.SafetySetting(category="HARM_CATEGORY_HARASSMENT", threshold="BLOCK_NONE"),
+                types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="BLOCK_NONE"),
+                types.SafetySetting(category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="BLOCK_NONE"),
+                types.SafetySetting(category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="BLOCK_NONE"),
+            ]
 
-            # System instruction for entity extraction
-            system_instruction = (
-                "You are an expert business analyst. Identify mentions of specific entities. "
-                "Return ONLY a valid JSON list of strings. If none, return []."
-            )
-
-            # UPDATED MODEL NAME FOR 2026
-            # Use 'gemini-2.5-flash' for the best balance of speed and intelligence.
-            # Alternatively, use 'gemini-2.0-flash-001' for high-throughput legacy support.
-            gemini_model = genai.GenerativeModel(
-                model_name='gemini-2.5-flash',
+            # System instruction and JSON response for entity extraction
+            gemini_config = types.GenerateContentConfig(
+                system_instruction=(
+                    "You are an expert business analyst. Identify mentions of specific entities. "
+                    "Return ONLY a valid JSON list of strings. If none, return []."
+                ),
                 safety_settings=safety_settings,
-                system_instruction=system_instruction,
-                generation_config={"response_mime_type": "application/json"}
+                response_mime_type="application/json",
             )
             clients_available.append("Google")
             logger.info("✅ Google Gemini client initialized with 2026 model (gemini-2.5-flash)")
         except ImportError:
-            logger.warning("⚠️  Google GenAI package not installed. Run: pip install google-generativeai")
+            logger.warning("⚠️  Google GenAI package not installed. Run: pip install google-genai")
     elif os.getenv("GOOGLE_API_KEY") and not ENABLE_GEMINI:
         logger.info("⏭️  Gemini disabled (ENABLE_GEMINI=false)")
     
@@ -740,56 +736,62 @@ def query_anthropic(prompt: str) -> str:
 
 
 def query_gemini(prompt: str) -> str:
-    """Query Google Gemini with retry logic and improved error handling for JSON responses."""
-    if not gemini_model:
+    """Query Google Gemini with retry logic and improved error handling for JSON responses (google.genai SDK)."""
+    if not genai_client or not gemini_config:
         return ""
-    
+
     def _query():
         # Add delay to avoid rate limiting (Google free tier has strict limits)
         time.sleep(2)
-        
+
         try:
-            response = gemini_model.generate_content(prompt)
-            
+            response = genai_client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=prompt,
+                config=gemini_config,
+            )
+
             # Check if the model actually returned a candidate
             if not response.candidates:
                 logger.warning("⚠️  Gemini: No candidates returned. Prompt may have been blocked.")
                 return ""
-            
-            # Check the finish reason (1 = STOP/success, 3 = SAFETY, etc.)
-            finish_reason = response.candidates[0].finish_reason
-            if finish_reason != 1:  # 1 corresponds to 'STOP' (Success)
+
+            c0 = response.candidates[0]
+            # finish_reason: 1 or 'STOP' = success; 3 or 'SAFETY' = blocked
+            finish_reason = getattr(c0, "finish_reason", None) or getattr(c0, "finishReason", None)
+            if finish_reason not in (1, "STOP", "stop"):
                 logger.warning(f"⚠️  Gemini: Response incomplete. Finish reason: {finish_reason}")
-                # Log safety ratings if it was blocked by a filter
-                if finish_reason == 3:  # SAFETY
-                    safety_ratings = response.candidates[0].safety_ratings
-                    logger.warning(f"⚠️  Gemini: Safety Ratings: {safety_ratings}")
+                if finish_reason in (3, "SAFETY", "safety"):
+                    safety_ratings = getattr(c0, "safety_ratings", None) or getattr(c0, "safetyRatings", None)
+                    if safety_ratings:
+                        logger.warning(f"⚠️  Gemini: Safety Ratings: {safety_ratings}")
                 return ""
-            
-            # Safely access text only if it exists
-            if response.candidates[0].content.parts:
-                json_text = response.text
-                
-                # Parse JSON response and convert to readable text format
-                try:
-                    entities = json.loads(json_text)
-                    if isinstance(entities, list) and len(entities) > 0:
-                        # Format as readable text for extract_companies to parse
-                        return ", ".join(entities)
-                    else:
-                        return ""
-                except json.JSONDecodeError:
-                    # If JSON parsing fails, return raw text
-                    logger.warning("⚠️  Gemini: Failed to parse JSON response, returning raw text")
-                    return json_text
-            else:
+
+            # Safely access text (new SDK exposes response.text)
+            json_text = getattr(response, "text", None) or ""
+            if not json_text and c0.content and getattr(c0.content, "parts", None):
+                parts = c0.content.parts
+                if parts:
+                    json_text = getattr(parts[0], "text", None) or ""
+
+            if not json_text:
                 logger.warning("⚠️  Gemini: Response parts are empty.")
                 return ""
-                
+
+            # Parse JSON response and convert to readable text format
+            try:
+                entities = json.loads(json_text)
+                if isinstance(entities, list) and len(entities) > 0:
+                    return ", ".join(entities)
+                return ""
+            except json.JSONDecodeError:
+                logger.warning("⚠️  Gemini: Failed to parse JSON response, returning raw text")
+                return json_text
+
         except Exception as e:
             logger.error(f"❌ Error querying Gemini: {e}")
             return ""
-    
+
     return retry_with_backoff(_query)()
 
 

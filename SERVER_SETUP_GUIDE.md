@@ -105,7 +105,7 @@ source venv/bin/activate
 ### Install Python Packages
 ```bash
 pip install --upgrade pip
-pip install openai anthropic google-generativeai requests python-dotenv playwright
+pip install openai anthropic google-genai requests python-dotenv playwright
 ```
 
 ### Install Playwright Browser

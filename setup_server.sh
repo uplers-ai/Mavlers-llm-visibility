@@ -80,7 +80,7 @@ source "$VENV_DIR/bin/activate"
 # ------------------------------------------------------------------------------
 echo -e "${YELLOW}[5/7] Installing Python dependencies...${NC}"
 pip install --upgrade pip
-pip install openai anthropic google-generativeai requests python-dotenv playwright
+pip install openai anthropic google-genai requests python-dotenv playwright
 
 # ------------------------------------------------------------------------------
 # Step 6: Install Playwright Browser

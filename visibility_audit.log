@@ -1,0 +1,50 @@
+2026-02-03 17:15:44,306 - INFO - 
+============================================================
+2026-02-03 17:15:44,306 - INFO - 🚀 STARTING LLM VISIBILITY AUDIT
+2026-02-03 17:15:44,306 - INFO - ============================================================
+2026-02-03 17:15:44,306 - INFO - Target Company: Mavlers
+2026-02-03 17:15:44,306 - INFO - Target Region: USA
+2026-02-03 17:15:44,306 - INFO - Prompt Categories: 2
+2026-02-03 17:15:44,306 - INFO - Total Prompts: 10
+2026-02-03 17:15:44,306 - INFO - Runs per Prompt: 3
+2026-02-03 17:15:44,306 - INFO - Archive Retention: 12 weeks
+2026-02-03 17:15:44,306 - INFO - Email Notifications: Enabled
+2026-02-03 17:15:48,312 - INFO - ✅ OpenAI client initialized
+2026-02-03 17:15:49,580 - INFO - ✅ Anthropic client initialized
+2026-02-03 17:15:50,850 - INFO - ✅ Google Gemini client initialized with 2026 model (gemini-2.5-flash)
+2026-02-03 17:15:50,850 - INFO - ✅ xAI Grok client initialized
+2026-02-03 17:15:50,850 - INFO - ✅ Perplexity client initialized
+2026-02-03 17:16:06,396 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-03 17:16:22,099 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-03 17:16:36,878 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-03 17:16:47,107 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-03 17:16:59,325 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-03 17:17:09,933 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-03 17:17:16,316 - INFO - 
+============================================================
+2026-02-03 17:17:16,317 - INFO - 🚀 STARTING LLM VISIBILITY AUDIT
+2026-02-03 17:17:16,319 - INFO - ============================================================
+2026-02-03 17:17:16,319 - INFO - Target Company: Mavlers
+2026-02-03 17:17:16,319 - INFO - Target Region: USA
+2026-02-03 17:17:16,370 - INFO - Prompt Categories: 2
+2026-02-03 17:17:16,442 - INFO - Total Prompts: 10
+2026-02-03 17:17:16,442 - INFO - Runs per Prompt: 3
+2026-02-03 17:17:16,442 - INFO - Archive Retention: 12 weeks
+2026-02-03 17:17:16,442 - INFO - Email Notifications: Enabled
+2026-02-03 17:17:19,356 - INFO - ✅ OpenAI client initialized
+2026-02-03 17:17:20,215 - INFO - ✅ Anthropic client initialized
+2026-02-03 17:17:21,626 - INFO - ✅ Google Gemini client initialized with 2026 model (gemini-2.5-flash)
+2026-02-03 17:17:21,626 - INFO - ✅ xAI Grok client initialized
+2026-02-03 17:17:21,627 - INFO - ✅ Perplexity client initialized
+2026-02-03 17:17:32,755 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-03 17:17:45,103 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-03 17:17:58,728 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-03 17:18:09,822 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-03 17:18:20,632 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-03 17:18:31,299 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-03 17:18:34,311 - INFO - AFC is enabled with max remote calls: 10.
+2026-02-03 17:18:37,445 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-02-03 17:18:40,456 - INFO - AFC is enabled with max remote calls: 10.
+2026-02-03 17:18:42,085 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-02-03 17:18:45,097 - INFO - AFC is enabled with max remote calls: 10.
+2026-02-03 17:18:46,802 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"

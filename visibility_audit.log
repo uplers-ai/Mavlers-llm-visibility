@@ -1896,3 +1896,391 @@
 2026-02-01 07:55:20,088 - INFO -    Raw data: audit_results.json
 2026-02-01 07:55:20,088 - INFO -    Screenshot: visibility_dashboard_2026-02-01.png
 2026-02-01 07:55:20,088 - INFO -    Archives: archives/
+2026-02-08 06:38:08,302 - INFO - 
+============================================================
+2026-02-08 06:38:08,302 - INFO - 🚀 STARTING LLM VISIBILITY AUDIT
+2026-02-08 06:38:08,302 - INFO - ============================================================
+2026-02-08 06:38:08,302 - INFO - Target Company: Uplers
+2026-02-08 06:38:08,302 - INFO - Target Region: USA
+2026-02-08 06:38:08,302 - INFO - Prompt Categories: 11
+2026-02-08 06:38:08,303 - INFO - Total Prompts: 46
+2026-02-08 06:38:08,303 - INFO - Runs per Prompt: 3
+2026-02-08 06:38:08,303 - INFO - Archive Retention: 12 weeks
+2026-02-08 06:38:08,303 - INFO - Email Notifications: Enabled
+2026-02-08 06:38:08,311 - INFO - 📊 Found previous audit from 2026-02-01
+2026-02-08 06:38:08,335 - INFO - 📅 Found monthly comparison data from 2026-01-11
+2026-02-08 06:38:08,335 - INFO - 📅 Found monthly comparison data from 2026-01-11
+2026-02-08 06:38:08,404 - INFO - 📈 Found 8 historical data points for trend analysis
+2026-02-08 06:38:08,950 - INFO - ✅ OpenAI client initialized
+2026-02-08 06:38:09,190 - INFO - ✅ Anthropic client initialized
+2026-02-08 06:38:09,565 - INFO - ✅ Google Gemini client initialized with 2026 model (gemini-2.5-flash)
+2026-02-08 06:38:09,566 - INFO - ✅ xAI Grok client initialized
+2026-02-08 06:38:09,566 - INFO - ✅ Perplexity client initialized
+2026-02-08 06:38:21,456 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:38:29,522 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:38:38,346 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:38:50,474 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:39:00,949 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:39:12,365 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:39:32,765 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2026-02-08 06:40:02,850 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2026-02-08 06:41:02,919 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2026-02-08 06:43:02,920 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2026-02-08 06:43:03,987 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2026-02-08 06:43:34,055 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2026-02-08 06:44:34,267 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2026-02-08 06:46:34,268 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2026-02-08 06:46:35,334 - WARNING - Rate limit hit! Attempt 1/3. Waiting 30s...
+2026-02-08 06:47:05,402 - WARNING - Rate limit hit! Attempt 2/3. Waiting 60s...
+2026-02-08 06:48:05,467 - WARNING - Rate limit hit! Attempt 3/3. Waiting 120s...
+2026-02-08 06:50:05,467 - ERROR - All 3 attempts failed for _query: 429 Client Error: Too Many Requests for url: https://api.x.ai/v1/chat/completions
+2026-02-08 06:50:05,467 - WARNING - ⏭️  Skipping Grok for remaining queries (3 consecutive failures)
+2026-02-08 06:50:06,663 - WARNING - Attempt 1/3 failed: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions. Retrying in 5s...
+2026-02-08 06:50:11,726 - WARNING - Attempt 2/3 failed: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions. Retrying in 10s...
+2026-02-08 06:50:21,793 - WARNING - Attempt 3/3 failed: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions. Retrying in 20s...
+2026-02-08 06:50:41,794 - ERROR - All 3 attempts failed for _query: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions
+2026-02-08 06:50:42,851 - WARNING - Attempt 1/3 failed: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions. Retrying in 5s...
+2026-02-08 06:50:47,936 - WARNING - Attempt 2/3 failed: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions. Retrying in 10s...
+2026-02-08 06:50:58,013 - WARNING - Attempt 3/3 failed: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions. Retrying in 20s...
+2026-02-08 06:51:18,014 - ERROR - All 3 attempts failed for _query: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions
+2026-02-08 06:51:19,101 - WARNING - Attempt 1/3 failed: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions. Retrying in 5s...
+2026-02-08 06:51:24,182 - WARNING - Attempt 2/3 failed: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions. Retrying in 10s...
+2026-02-08 06:51:34,244 - WARNING - Attempt 3/3 failed: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions. Retrying in 20s...
+2026-02-08 06:51:54,245 - ERROR - All 3 attempts failed for _query: 401 Client Error: Unauthorized for url: https://api.perplexity.ai/chat/completions
+2026-02-08 06:51:54,245 - WARNING - ⏭️  Skipping Perplexity for remaining queries (3 consecutive failures)
+2026-02-08 06:52:05,928 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:52:16,782 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:52:27,976 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:52:38,860 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:52:49,414 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:53:02,038 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:53:13,563 - WARNING - ⏭️  Skipping Gemini for remaining queries (3 consecutive failures)
+2026-02-08 06:53:29,663 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:53:39,244 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:53:52,582 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:54:02,615 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:54:12,601 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:54:23,470 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:54:53,985 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:55:12,347 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:55:29,736 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:55:46,675 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:56:05,318 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:56:25,128 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:56:43,551 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:56:51,266 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:57:01,230 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:57:10,959 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:57:22,751 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:57:33,946 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:57:55,009 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:58:07,849 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:58:20,620 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:58:30,863 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:58:41,360 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:58:52,468 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 06:59:17,190 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:59:26,131 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:59:37,805 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 06:59:48,533 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:00:01,079 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:00:14,494 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:00:32,672 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:00:43,859 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:00:52,359 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:01:01,768 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:01:12,188 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:01:23,091 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:01:39,181 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:01:47,758 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:01:55,314 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:02:06,827 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:02:18,786 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:02:30,096 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:02:47,308 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:02:53,803 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:03:02,988 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:03:12,689 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:03:22,068 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:03:32,054 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:03:48,630 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:03:58,436 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:04:11,161 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:04:24,334 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:04:38,326 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:04:49,354 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:05:10,010 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:05:27,124 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:05:41,380 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:05:51,330 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:06:01,893 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:06:13,491 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:06:35,429 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:06:50,800 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:07:02,728 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:07:15,883 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:07:29,570 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:07:43,856 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:08:03,776 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:08:15,615 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:08:27,469 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:08:39,395 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:08:49,898 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:09:02,005 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:09:19,664 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:09:31,074 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:09:40,029 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:09:52,230 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:10:05,297 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:10:19,452 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:10:43,038 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:10:57,233 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:11:09,708 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:11:29,866 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:11:48,776 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:12:12,726 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:12:49,503 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:13:06,146 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:13:26,131 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:13:44,219 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:13:57,151 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:14:15,906 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:14:35,171 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:14:45,342 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:14:55,267 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:15:06,367 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:15:16,964 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:15:26,634 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:15:49,597 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:16:03,888 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:16:18,849 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:16:29,017 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:16:42,512 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:16:53,840 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:17:12,673 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:17:21,395 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:17:32,572 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:17:48,891 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:18:02,732 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:18:18,172 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:18:38,384 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:18:46,736 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:18:57,347 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:19:07,987 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:19:23,889 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:19:35,658 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:19:53,661 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:20:00,248 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:20:09,307 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:20:23,660 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:20:36,884 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:20:50,411 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:21:07,938 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:21:16,081 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:21:24,692 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:21:36,364 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:21:47,284 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:21:59,002 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:22:17,323 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:22:25,440 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:22:35,223 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:22:46,915 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:22:59,468 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:23:16,650 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:23:33,062 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:23:41,153 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:23:50,884 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:24:04,379 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:24:15,718 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:24:30,359 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:24:47,212 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:24:58,094 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:25:11,157 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:25:23,679 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:25:38,658 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:25:51,048 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:26:07,609 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:26:23,269 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:26:48,612 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:27:10,272 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:27:20,631 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:27:31,630 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:27:51,449 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:27:58,908 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:28:07,103 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:28:17,195 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:28:27,804 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:28:39,257 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:28:55,722 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:29:04,179 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:29:11,402 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:29:21,288 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:29:31,758 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:29:40,865 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:30:01,794 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:30:11,109 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:30:22,660 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:30:36,851 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:30:49,116 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:31:10,241 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:31:28,661 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:31:43,073 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:31:55,285 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:32:11,796 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:32:23,371 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:32:33,922 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:32:52,309 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:33:01,518 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:33:13,942 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:33:27,009 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:33:39,182 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:33:53,078 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:34:11,894 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:34:22,331 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:34:32,461 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:34:44,243 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:34:55,001 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:35:08,005 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:35:33,334 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:35:46,035 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:35:56,442 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:36:08,567 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:36:22,413 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:36:35,396 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:36:54,544 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:37:06,601 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:37:14,840 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:37:25,726 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:37:36,381 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:37:45,841 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:38:06,928 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:38:16,391 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:38:24,962 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:38:36,625 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:38:51,155 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:39:02,410 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:39:19,748 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:39:26,887 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:39:35,368 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:39:44,765 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:39:53,936 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:40:03,035 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:40:35,530 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:40:46,706 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:40:58,174 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:41:13,977 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:41:37,976 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:41:53,513 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:42:12,738 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:42:19,872 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:42:29,848 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:42:40,658 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:42:51,270 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:43:02,660 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:43:21,504 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:43:29,789 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:43:41,794 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:43:56,287 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:44:07,703 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:44:20,837 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:44:42,898 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:44:52,859 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:45:05,588 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:45:25,886 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:45:44,624 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:46:01,899 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:46:18,856 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:46:27,845 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:46:37,036 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:46:47,897 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:46:58,570 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:47:08,980 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:47:25,867 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:47:33,393 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:47:42,365 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:47:54,115 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:48:05,235 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:48:16,427 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:48:34,332 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:48:44,608 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:48:51,652 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:49:03,703 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:49:15,716 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:49:32,937 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:49:49,443 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:49:57,854 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:50:07,942 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:50:18,021 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:50:27,540 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:50:38,075 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:50:56,638 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:51:04,659 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:51:12,980 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-08 07:51:21,786 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:51:31,064 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:51:39,816 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-02-08 07:51:49,818 - INFO - 📊 Analyzing results...
+2026-02-08 07:51:49,821 - INFO - 🎯 Calculating goal progress...
+2026-02-08 07:51:49,822 - INFO - 📅 Getting monthly aggregates (last 3 months)...
+2026-02-08 07:51:49,888 - INFO - 📊 Found 3 months of historical data for comparison
+2026-02-08 07:51:49,909 - INFO - ✅ Results saved to audit_results.json
+2026-02-08 07:51:49,909 - INFO - 📁 Archived to archives/audit_results_2026-02-08.json
+2026-02-08 07:51:49,909 - INFO - 🎨 Generating HTML dashboard...
+2026-02-08 07:51:49,910 - INFO - ✅ Dashboard saved to visibility_dashboard.html
+2026-02-08 07:51:49,910 - INFO - 📁 Archived to archives/visibility_dashboard_2026-02-08.html
+2026-02-08 07:51:49,935 - INFO - 📸 Capturing screenshot of visibility_dashboard.html...
+2026-02-08 07:51:53,286 - INFO - ✅ Screenshot saved to visibility_dashboard_2026-02-08.png
+2026-02-08 07:51:53,287 - INFO - 📁 Screenshot archived to archives/visibility_dashboard_2026-02-08.png
+2026-02-08 07:51:53,287 - INFO - 
+============================================================
+2026-02-08 07:51:53,288 - INFO - 📈 AUDIT SUMMARY
+2026-02-08 07:51:53,288 - INFO - ============================================================
+2026-02-08 07:51:53,288 - INFO - 🎯 Overall Visibility Score: 4.9%
+2026-02-08 07:51:53,288 - INFO - 🏆 Overall Ranking: #10 of 704
+2026-02-08 07:51:53,288 - INFO - 
+🎯 GOALS PROGRESS: 0/5 LLMs achieved target
+2026-02-08 07:51:53,288 - INFO -    --------------------------------------------------
+2026-02-08 07:51:53,288 - INFO -    🟡 ChatGPT: 22.5% / 40% target (56.2% progress)
+2026-02-08 07:51:53,288 - INFO -    🔴 Gemini: 0.0% / 40% target (0.0% progress)
+2026-02-08 07:51:53,288 - INFO -    🔴 Claude: 2.2% / 25% target (8.8% progress)
+2026-02-08 07:51:53,288 - INFO -    🔴 Perplexity: 0.0% / 40% target (0.0% progress)
+2026-02-08 07:51:53,288 - INFO -    🔴 Grok: 0.0% / 25% target (0.0% progress)
+2026-02-08 07:51:53,288 - INFO - 
+📊 Weekly Changes (since 2026-02-01):
+2026-02-08 07:51:53,288 - INFO -    📉 Visibility decreased by 3.7% this week
+2026-02-08 07:51:53,288 - INFO -    ⬇️ Ranking dropped by 3 position(s)
+2026-02-08 07:51:53,288 - INFO - 
+📅 Monthly Changes (since 2026-01-11):
+2026-02-08 07:51:53,288 - INFO -    📉 Visibility decreased by 4.5% this month
+2026-02-08 07:51:53,288 - INFO -    🏆 Ranking improved by 4 position(s)
+2026-02-08 07:51:53,288 - INFO - 
+📅 Monthly Comparison (3 months):
+2026-02-08 07:51:53,289 - INFO -    Dec 2025: 8.1% visibility (Rank #12)
+2026-02-08 07:51:53,289 - INFO -    Jan 2026: 9.5% visibility (Rank #12)
+2026-02-08 07:51:53,289 - INFO -    Feb 2026: 8.6% visibility (Rank #7)
+2026-02-08 07:51:53,289 - INFO - 
+📊 By LLM:
+2026-02-08 07:51:53,289 - INFO -    ChatGPT: 22.5% (↑2.2% this week) 🎯17.5% to goal (31/138 queries)
+2026-02-08 07:51:53,289 - INFO -    Gemini: 0.0% (0/138 queries)
+2026-02-08 07:51:53,289 - INFO -    Claude: 2.2% (↑2.2% this week) (3/138 queries)
+2026-02-08 07:51:53,289 - INFO -    Perplexity: 0.0% (↓22.5% this week) (0/138 queries)
+2026-02-08 07:51:53,289 - INFO -    Grok: 0.0% (0/138 queries)
+2026-02-08 07:51:53,289 - INFO - 
+⚠️  Weak Spots:
+2026-02-08 07:51:53,289 - INFO -    - How to Hire from India: 1.1%
+2026-02-08 07:51:53,289 - INFO -    - Cost and Budget: 8.3%
+2026-02-08 07:51:53,289 - INFO -    - Top Platforms for Indian Developers: 6.7%
+2026-02-08 07:51:53,289 - INFO -    - Hiring Managers Multi-Role: 6.7%
+2026-02-08 07:51:53,289 - INFO -    - Fast Hiring Process: 0.0%
+2026-02-08 07:51:53,289 - INFO -    - Direct Hiring Queries: 6.0%
+2026-02-08 07:51:53,289 - INFO -    - Competitors and Comparisons: 13.3%
+2026-02-08 07:51:53,289 - INFO -    - Hiring Models: 11.7%
+2026-02-08 07:51:53,289 - INFO -    - Vetting Process: 0.0%
+2026-02-08 07:51:53,289 - INFO -    - AI-Driven Recruitment: 1.7%
+2026-02-08 07:51:53,289 - INFO -    - Talent Platform for Tech Companies: 1.1%
+2026-02-08 07:51:53,289 - INFO - 
+✅ Audit complete!
+2026-02-08 07:51:53,290 - INFO -    Dashboard: visibility_dashboard.html
+2026-02-08 07:51:53,290 - INFO -    Raw data: audit_results.json
+2026-02-08 07:51:53,290 - INFO -    Screenshot: visibility_dashboard_2026-02-08.png
+2026-02-08 07:51:53,290 - INFO -    Archives: archives/

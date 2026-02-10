@@ -757,11 +757,15 @@ def query_gemini(prompt: str) -> str:
                 return ""
 
             c0 = response.candidates[0]
-            # finish_reason: 1 or 'STOP' = success; 3 or 'SAFETY' = blocked
+            # finish_reason: 1 or 'STOP' or FinishReason.STOP (enum) = success; 3 or 'SAFETY' = blocked
             finish_reason = getattr(c0, "finish_reason", None) or getattr(c0, "finishReason", None)
-            if finish_reason not in (1, "STOP", "stop"):
+            is_stop = (
+                finish_reason in (1, "STOP", "stop")
+                or getattr(finish_reason, "name", None) == "STOP"
+            )
+            if not is_stop:
                 logger.warning(f"⚠️  Gemini: Response incomplete. Finish reason: {finish_reason}")
-                if finish_reason in (3, "SAFETY", "safety"):
+                if finish_reason in (3, "SAFETY", "safety") or getattr(finish_reason, "name", None) == "SAFETY":
                     safety_ratings = getattr(c0, "safety_ratings", None) or getattr(c0, "safetyRatings", None)
                     if safety_ratings:
                         logger.warning(f"⚠️  Gemini: Safety Ratings: {safety_ratings}")
@@ -783,7 +787,9 @@ def query_gemini(prompt: str) -> str:
                 entities = json.loads(json_text)
                 if isinstance(entities, list) and len(entities) > 0:
                     return ", ".join(entities)
-                return ""
+                # Empty list [] is a valid success response (no entities found) - return space
+                # so run_single_query does not count this as an API failure and skip Gemini
+                return " "
             except json.JSONDecodeError:
                 logger.warning("⚠️  Gemini: Failed to parse JSON response, returning raw text")
                 return json_text

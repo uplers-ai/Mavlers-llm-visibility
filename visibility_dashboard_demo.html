@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Visibility Audit - Mavlers</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --accent: #00ff88;
+            --accent-dim: #00cc6a;
+            --text-primary: #ffffff;
+            --text-secondary: #8b8b9e;
+            --text-muted: #5a5a6e;
+            --border: #2a2a3a;
+            --danger: #ff4757;
+            --warning: #ffa502;
+            --success: #00ff88;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .logo {
+            font-size: 14px;
+            letter-spacing: 4px;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff 0%, #00ff88 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 18px;
+        }
+        
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .meta-item span {
+            color: var(--accent);
+        }
+        
+        /* Score Cards */
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .score-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        
+        .score-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+        
+        .score-card.primary {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, var(--bg-card) 100%);
+        }
+        
+        .score-card .label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        
+        .score-card .value {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        
+        .score-card .value.accent { color: var(--accent); }
+        .score-card .value.warning { color: var(--warning); }
+        .score-card .value.danger { color: var(--danger); }
+        
+        .score-card .detail {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 48px 0 24px;
+        }
+        
+        .section-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .section-header .line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+        
+        /* LLM Comparison */
+        .llm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .llm-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+        }
+        
+        .llm-card .llm-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .llm-card .llm-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .llm-icon.chatgpt { background: #10a37f; }
+        .llm-icon.claude { background: #d97757; }
+        .llm-icon.gemini { background: linear-gradient(135deg, #4285f4, #ea4335, #fbbc04, #34a853); }
+        .llm-icon.grok { background: #1a1a1a; border: 1px solid #333; }
+        .llm-icon.perplexity { background: #20b8cd; }
+        
+        .llm-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .llm-stat {
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: 10px;
+        }
+        
+        .llm-stat .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .llm-stat .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        
+        /* Rankings Table */
+        .rankings-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .rankings-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .rankings-card .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .rankings-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+        
+        .ranking-item:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .ranking-item:last-child {
+            border-bottom: none;
+        }
+        
+        .ranking-item.target {
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        .rank-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 16px;
+        }
+        
+        .ranking-item.target .rank-num {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+        
+        .company-name {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .mention-count {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        /* Per-Prompt Brand Mentions */
+        .prompt-brands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .prompt-brand-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .prompt-brand-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 20px 8px;
+        }
+        
+        .prompt-number {
+            background: var(--accent);
+            color: var(--bg-primary);
+            font-weight: 700;
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+        
+        .prompt-intent-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .prompt-text {
+            padding: 4px 20px 14px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .prompt-brand-list {
+            padding: 8px 12px;
+        }
+        
+        .prompt-brand-item {
+            display: flex;
+            align-items: center;
+            padding: 7px 8px;
+            border-radius: 8px;
+            transition: background 0.15s;
+        }
+        
+        .prompt-brand-item:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .prompt-brand-item.target-brand {
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        .prompt-brand-rank {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .prompt-brand-item.target-brand .prompt-brand-rank {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+        
+        .prompt-brand-name {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .prompt-brand-count {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        
+        /* Intent Analysis */
+        .intent-chart-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 48px;
+        }
+        
+        .chart-wrapper {
+            height: 400px;
+            position: relative;
+        }
+        
+        /* Weak Spots */
+        .weak-spots {
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.1) 0%, var(--bg-card) 100%);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 48px;
+        }
+        
+        .weak-spots h3 {
+            color: var(--danger);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .weak-spot-item {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .weak-spot-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .weak-spot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .weak-spot-intent {
+            font-weight: 600;
+        }
+        
+        .weak-spot-score {
+            color: var(--danger);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .weak-spot-prompts {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        .weak-spot-prompts li {
+            margin: 8px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+        
+        .weak-spot-prompts li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--text-muted);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+        
+        /* Goals Section */
+        .goals-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 48px;
+        }
+        
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+        
+        .goal-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .goal-card.achieved {
+            border-left: 4px solid var(--success);
+        }
+        
+        .goal-card.in_progress {
+            border-left: 4px solid var(--warning);
+        }
+        
+        .goal-card.far {
+            border-left: 4px solid var(--danger);
+        }
+        
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .goal-llm {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .goal-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .goal-status.achieved {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--success);
+        }
+        
+        .goal-status.in_progress {
+            background: rgba(255, 165, 2, 0.2);
+            color: var(--warning);
+        }
+        
+        .goal-status.far {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--danger);
+        }
+        
+        .goal-progress {
+            margin: 16px 0;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-fill.achieved { background: var(--success); }
+        .progress-fill.in_progress { background: var(--warning); }
+        .progress-fill.far { background: var(--danger); }
+        
+        .goal-metrics {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+        
+        .goal-current {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* Monthly Comparison Table */
+        .monthly-table {
+            width: 100%;
+            min-width: 700px;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .monthly-table th,
+        .monthly-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .monthly-table th {
+            background: var(--bg-secondary);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+        
+        .monthly-table td {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+        }
+        
+        .monthly-table tr:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .change-positive {
+            color: var(--success);
+        }
+        
+        .change-negative {
+            color: var(--danger);
+        }
+        
+        .change-neutral {
+            color: var(--text-muted);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 32px; }
+            .score-card .value { font-size: 40px; }
+            .container { padding: 24px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">LLM Visibility Audit</div>
+            <h1>Mavlers</h1>
+            <p class="subtitle">Brand visibility analysis across AI assistants</p>
+            <div class="meta-info">
+                <div class="meta-item">Generated: <span>2026-02-17</span></div>
+                <div class="meta-item">Queries: <span>150</span></div>
+                <div class="meta-item">Prompts: <span>10</span></div>
+                <div class="meta-item">Runs/Prompt: <span>3</span></div>
+            </div>
+        </header>
+        
+        <!-- Overall Scores -->
+        <div class="score-grid">
+            <div class="score-card primary">
+                <div class="label">Overall Visibility Score</div>
+                <div class="value accent">52.0%</div>
+                <div class="detail">78 mentions across 150 queries</div>
+            </div>
+            <div class="score-card">
+                <div class="label">Overall Ranking</div>
+                <div class="value warning">#4</div>
+                <div class="detail">out of 18 companies mentioned</div>
+            </div>
+            <div class="score-card">
+                <div class="label">Intent Categories</div>
+                <div class="value">2</div>
+                <div class="detail">1 weak spots identified</div>
+            </div>
+        </div>
+        
+        <!-- Weekly/Monthly Changes Section -->
+        <div class="changes-section" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 48px;">
+
+            <div class="score-card" style="border-left: 4px solid var(--success);">
+                <div class="label">📊 Weekly Change</div>
+                <div class="value" style="color: var(--success); font-size: 32px;">
+                    📈 +3.0%
+                </div>
+                <div class="detail">Compared to 2026-01-27</div>
+                <div class="detail" style="margin-top: 8px;">
+                    Rank: ↑1 position
+                </div>
+            </div>
+
+            <div class="score-card" style="border-left: 4px solid var(--success);">
+                <div class="label">📅 Monthly Change</div>
+                <div class="value" style="color: var(--success); font-size: 32px;">
+                    📈 +5.0%
+                </div>
+                <div class="detail">Compared to 2026-01-04</div>
+                <div class="detail" style="margin-top: 8px;">
+                    Rank: ↑2 positions
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Goals Progress Section -->
+        <div class="section-header">
+            <h2>🎯 Goals Progress</h2>
+            <div class="line"></div>
+        </div>
+        
+        <div class="goals-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div>
+                    <span style="font-size: 14px; color: var(--text-muted);">Goal Achievement:</span>
+                    <span style="font-size: 20px; font-weight: 600; margin-left: 8px; color: var(--accent);">1/5 LLMs</span>
+                </div>
+                <div style="display: flex; gap: 16px;">
+                    <span style="color: var(--success);">🟢 1 Achieved</span>
+                    <span style="color: var(--warning);">🟡 0 In Progress</span>
+                    <span style="color: var(--danger);">🔴 0 Far</span>
+                </div>
+            </div>
+            
+            <div class="goals-grid">
+
+                <div class="goal-card in_progress">
+                    <div class="goal-header">
+                        <span class="goal-llm">ChatGPT</span>
+                        <span class="goal-status in_progress">In Progress</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill in_progress" style="width: 76%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-metrics">
+                        <span>Current: <span class="goal-current">61%</span></span>
+                        <span>Target: 60%</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                        📈 5% more to reach goal
+                    </div>
+                </div>
+
+                <div class="goal-card in_progress">
+                    <div class="goal-header">
+                        <span class="goal-llm">Claude</span>
+                        <span class="goal-status in_progress">In Progress</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill in_progress" style="width: 73%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-metrics">
+                        <span>Current: <span class="goal-current">58%</span></span>
+                        <span>Target: 60%</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                        📈 5% more to reach goal
+                    </div>
+                </div>
+
+                <div class="goal-card in_progress">
+                    <div class="goal-header">
+                        <span class="goal-llm">Gemini</span>
+                        <span class="goal-status in_progress">In Progress</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill in_progress" style="width: 89%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-metrics">
+                        <span>Current: <span class="goal-current">69%</span></span>
+                        <span>Target: 60%</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                        📈 5% more to reach goal
+                    </div>
+                </div>
+
+                <div class="goal-card in_progress">
+                    <div class="goal-header">
+                        <span class="goal-llm">Grok</span>
+                        <span class="goal-status in_progress">In Progress</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill in_progress" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-metrics">
+                        <span>Current: <span class="goal-current">50%</span></span>
+                        <span>Target: 60%</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                        📈 5% more to reach goal
+                    </div>
+                </div>
+
+                <div class="goal-card achieved">
+                    <div class="goal-header">
+                        <span class="goal-llm">Perplexity</span>
+                        <span class="goal-status achieved">✓ Achieved</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill achieved" style="width: 77%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-metrics">
+                        <span>Current: <span class="goal-current">62%</span></span>
+                        <span>Target: 60%</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                        🎉 Goal achieved!
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Weekly Date-Wise Comparison Section -->
+        <div class="section-header">
+            <h2>📅 Weekly Comparison (Date-Wise)</h2>
+            <div class="line"></div>
+        </div>
+        
+        <div class="goals-section" style="overflow-x: auto;">
+            <table class="monthly-table">
+                <thead>
+                    <tr>
+                        <th>LLM</th>
+                        <th>2026-01-13</th>
+                        <th>2026-01-20</th>
+                        <th>2026-01-27</th>
+                        <th>2026-02-03</th>
+                        <th>2026-02-10</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight: 600;">ChatGPT</td>
+                        <td>50% <span style="color: var(--text-muted); font-size: 12px;">(22 mentions)</span></td>
+                        <td>46% <span style="color: var(--text-muted); font-size: 12px;">(20 mentions)</span></td>
+                        <td>44% <span style="color: var(--text-muted); font-size: 12px;">(18 mentions)</span></td>
+                        <td>44% <span style="color: var(--text-muted); font-size: 12px;">(16 mentions)</span></td>
+                        <td>42% <span style="color: var(--text-muted); font-size: 12px;">(14 mentions)</span></td>
+                        <td class="change-negative">↓ 2% <span style="font-size: 12px;">(↓2 mentions)</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Claude</td>
+                        <td>57% <span style="color: var(--text-muted); font-size: 12px;">(22 mentions)</span></td>
+                        <td>53% <span style="color: var(--text-muted); font-size: 12px;">(20 mentions)</span></td>
+                        <td>51% <span style="color: var(--text-muted); font-size: 12px;">(18 mentions)</span></td>
+                        <td>51% <span style="color: var(--text-muted); font-size: 12px;">(16 mentions)</span></td>
+                        <td>49% <span style="color: var(--text-muted); font-size: 12px;">(14 mentions)</span></td>
+                        <td class="change-negative">↓ 2% <span style="font-size: 12px;">(↓2 mentions)</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Gemini</td>
+                        <td>58% <span style="color: var(--text-muted); font-size: 12px;">(22 mentions)</span></td>
+                        <td>54% <span style="color: var(--text-muted); font-size: 12px;">(20 mentions)</span></td>
+                        <td>52% <span style="color: var(--text-muted); font-size: 12px;">(18 mentions)</span></td>
+                        <td>52% <span style="color: var(--text-muted); font-size: 12px;">(16 mentions)</span></td>
+                        <td>50% <span style="color: var(--text-muted); font-size: 12px;">(14 mentions)</span></td>
+                        <td class="change-negative">↓ 2% <span style="font-size: 12px;">(↓2 mentions)</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Grok</td>
+                        <td>49% <span style="color: var(--text-muted); font-size: 12px;">(22 mentions)</span></td>
+                        <td>45% <span style="color: var(--text-muted); font-size: 12px;">(20 mentions)</span></td>
+                        <td>43% <span style="color: var(--text-muted); font-size: 12px;">(18 mentions)</span></td>
+                        <td>43% <span style="color: var(--text-muted); font-size: 12px;">(16 mentions)</span></td>
+                        <td>41% <span style="color: var(--text-muted); font-size: 12px;">(14 mentions)</span></td>
+                        <td class="change-negative">↓ 2% <span style="font-size: 12px;">(↓2 mentions)</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Perplexity</td>
+                        <td>56% <span style="color: var(--text-muted); font-size: 12px;">(22 mentions)</span></td>
+                        <td>52% <span style="color: var(--text-muted); font-size: 12px;">(20 mentions)</span></td>
+                        <td>50% <span style="color: var(--text-muted); font-size: 12px;">(18 mentions)</span></td>
+                        <td>50% <span style="color: var(--text-muted); font-size: 12px;">(16 mentions)</span></td>
+                        <td>48% <span style="color: var(--text-muted); font-size: 12px;">(14 mentions)</span></td>
+                        <td class="change-negative">↓ 2% <span style="font-size: 12px;">(↓2 mentions)</span></td>
+                    </tr>
+                    <tr style="background: var(--bg-primary); font-weight: 600;">
+                        <td>Overall</td>
+                        <td>54% <span style="color: var(--text-muted); font-size: 12px;">(Rank #2)</span></td>
+                        <td>50% <span style="color: var(--text-muted); font-size: 12px;">(Rank #3)</span></td>
+                        <td>48% <span style="color: var(--text-muted); font-size: 12px;">(Rank #4)</span></td>
+                        <td>48% <span style="color: var(--text-muted); font-size: 12px;">(Rank #5)</span></td>
+                        <td>46% <span style="color: var(--text-muted); font-size: 12px;">(Rank #6)</span></td>
+                        <td class="change-negative">↓ 2% <span style="font-size: 12px;">(Rank ↓1)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Historical Trend Chart -->
+        <div class="section-header">
+            <h2>Visibility Trend (Last 90 Days)</h2>
+            <div class="line"></div>
+        </div>
+        
+        <div class="chart-container" style="margin-bottom: 48px;">
+            <canvas id="trendChart" height="250"></canvas>
+        </div>
+        
+        <script>
+            // Trend Chart
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: ["2026-01-13", "2026-01-20", "2026-01-27", "2026-02-03", "2026-02-10"],
+                    datasets: [{
+                        label: 'Visibility Score (%)',
+                        data: [54, 50, 48, 48, 46],
+                        borderColor: '#00ff88',
+                        backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Rank (lower is better)',
+                        data: [2, 3, 4, 5, 6],
+                        borderColor: '#ffa502',
+                        backgroundColor: 'rgba(255, 165, 2, 0.1)',
+                        fill: false,
+                        tension: 0.3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#8b8b9e', font: { family: "'Space Grotesk'" } }
+                        },
+                        tooltip: {
+                            backgroundColor: '#1a1a24',
+                            titleColor: '#fff',
+                            bodyColor: '#8b8b9e',
+                            borderColor: '#2a2a3a',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#2a2a3a' },
+                            ticks: { color: '#8b8b9e' }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            min: 0,
+                            max: 100,
+                            grid: { color: '#2a2a3a' },
+                            ticks: { 
+                                color: '#00ff88',
+                                callback: function(value) { return value + '%'; }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Visibility Score',
+                                color: '#00ff88'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            reverse: true,
+                            min: 1,
+                            grid: { drawOnChartArea: false },
+                            ticks: { 
+                                color: '#ffa502',
+                                callback: function(value) { return '#' + value; }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Rank',
+                                color: '#ffa502'
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+
+        <!-- LLM Comparison -->
+        <div class="section-header">
+            <h2>Performance by LLM</h2>
+            <div class="line"></div>
+        </div>
+        
+        <div class="llm-grid">
+
+            <div class="llm-card">
+                <div class="llm-name">
+                    <div class="llm-icon chatgpt">C</div>
+                    ChatGPT
+                </div>
+                <div class="llm-stats">
+                    <div class="llm-stat">
+                        <div class="stat-label">Visibility</div>
+                        <div class="stat-value" style="color: var(--accent)">60.0%</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Rank</div>
+                        <div class="stat-value">#2</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Mentions</div>
+                        <div class="stat-value">18</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Queries</div>
+                        <div class="stat-value">30</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="llm-card">
+                <div class="llm-name">
+                    <div class="llm-icon claude">C</div>
+                    Claude
+                </div>
+                <div class="llm-stats">
+                    <div class="llm-stat">
+                        <div class="stat-label">Visibility</div>
+                        <div class="stat-value" style="color: var(--accent)">53.3%</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Rank</div>
+                        <div class="stat-value">#2</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Mentions</div>
+                        <div class="stat-value">16</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Queries</div>
+                        <div class="stat-value">30</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="llm-card">
+                <div class="llm-name">
+                    <div class="llm-icon gemini">G</div>
+                    Gemini
+                </div>
+                <div class="llm-stats">
+                    <div class="llm-stat">
+                        <div class="stat-label">Visibility</div>
+                        <div class="stat-value" style="color: var(--accent)">50.0%</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Rank</div>
+                        <div class="stat-value">#2</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Mentions</div>
+                        <div class="stat-value">15</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Queries</div>
+                        <div class="stat-value">30</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="llm-card">
+                <div class="llm-name">
+                    <div class="llm-icon grok">G</div>
+                    Grok
+                </div>
+                <div class="llm-stats">
+                    <div class="llm-stat">
+                        <div class="stat-label">Visibility</div>
+                        <div class="stat-value" style="color: var(--accent)">46.7%</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Rank</div>
+                        <div class="stat-value">#3</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Mentions</div>
+                        <div class="stat-value">14</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Queries</div>
+                        <div class="stat-value">30</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="llm-card">
+                <div class="llm-name">
+                    <div class="llm-icon perplexity">P</div>
+                    Perplexity
+                </div>
+                <div class="llm-stats">
+                    <div class="llm-stat">
+                        <div class="stat-label">Visibility</div>
+                        <div class="stat-value" style="color: var(--accent)">50.0%</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Rank</div>
+                        <div class="stat-value">#2</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Mentions</div>
+                        <div class="stat-value">15</div>
+                    </div>
+                    <div class="llm-stat">
+                        <div class="stat-label">Queries</div>
+                        <div class="stat-value">30</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section-header">
+            <h2>Brand Mentions by Query</h2>
+            <div class="line"></div>
+        </div>
+        
+        <div class="prompt-brands-grid">
+
+            <div class="prompt-brand-card">
+                <div class="prompt-brand-header">
+                    <span class="prompt-number">Q1</span>
+                    <span class="prompt-intent-label">Agency / Partner Intent (White-Label, Outsourcing, Fulfillment)</span>
+                </div>
+                <div class="prompt-text">Best white label digital marketing agency in the USA for agencies (SEO, PPC, email).</div>
+                <div class="prompt-brand-list">
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">1</span>
+                        <span class="prompt-brand-name">WebFX</span>
+                        <span class="prompt-brand-count">19</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">2</span>
+                        <span class="prompt-brand-name">DashClicks</span>
+                        <span class="prompt-brand-count">16</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">3</span>
+                        <span class="prompt-brand-name">Ignite Visibility</span>
+                        <span class="prompt-brand-count">11</span>
+                    </div>
+                    <div class="prompt-brand-item target-brand">
+                        <span class="prompt-brand-rank">4</span>
+                        <span class="prompt-brand-name">Mavlers</span>
+                        <span class="prompt-brand-count">11</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">5</span>
+                        <span class="prompt-brand-name">The HOTH</span>
+                        <span class="prompt-brand-count">10</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">6</span>
+                        <span class="prompt-brand-name">That! Company</span>
+                        <span class="prompt-brand-count">8</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">7</span>
+                        <span class="prompt-brand-name">Disruptive Advertising</span>
+                        <span class="prompt-brand-count">4</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">8</span>
+                        <span class="prompt-brand-name">KlientBoost</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">9</span>
+                        <span class="prompt-brand-name">Vendasta</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">10</span>
+                        <span class="prompt-brand-name">Mailchimp</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt-brand-card">
+                <div class="prompt-brand-header">
+                    <span class="prompt-number">Q2</span>
+                    <span class="prompt-intent-label">Agency / Partner Intent (White-Label, Outsourcing, Fulfillment)</span>
+                </div>
+                <div class="prompt-text">Top white label PPC providers in the USA for Google Ads and Performance Max management.</div>
+                <div class="prompt-brand-list">
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">1</span>
+                        <span class="prompt-brand-name">DashClicks</span>
+                        <span class="prompt-brand-count">18</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">2</span>
+                        <span class="prompt-brand-name">Ignite Visibility</span>
+                        <span class="prompt-brand-count">13</span>
+                    </div>
+                    <div class="prompt-brand-item target-brand">
+                        <span class="prompt-brand-rank">3</span>
+                        <span class="prompt-brand-name">Mavlers</span>
+                        <span class="prompt-brand-count">13</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">4</span>
+                        <span class="prompt-brand-name">The HOTH</span>
+                        <span class="prompt-brand-count">12</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">5</span>
+                        <span class="prompt-brand-name">That! Company</span>
+                        <span class="prompt-brand-count">10</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">6</span>
+                        <span class="prompt-brand-name">Disruptive Advertising</span>
+                        <span class="prompt-brand-count">6</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">7</span>
+                        <span class="prompt-brand-name">KlientBoost</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">8</span>
+                        <span class="prompt-brand-name">Vendasta</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">9</span>
+                        <span class="prompt-brand-name">Mailchimp</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">10</span>
+                        <span class="prompt-brand-name">HubSpot</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt-brand-card">
+                <div class="prompt-brand-header">
+                    <span class="prompt-number">Q3</span>
+                    <span class="prompt-intent-label">Agency / Partner Intent (White-Label, Outsourcing, Fulfillment)</span>
+                </div>
+                <div class="prompt-text">Best white label email marketing agency for agencies in the USA (Klaviyo, Braze, SFMC).</div>
+                <div class="prompt-brand-list">
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">1</span>
+                        <span class="prompt-brand-name">Ignite Visibility</span>
+                        <span class="prompt-brand-count">15</span>
+                    </div>
+                    <div class="prompt-brand-item target-brand">
+                        <span class="prompt-brand-rank">2</span>
+                        <span class="prompt-brand-name">Mavlers</span>
+                        <span class="prompt-brand-count">15</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">3</span>
+                        <span class="prompt-brand-name">The HOTH</span>
+                        <span class="prompt-brand-count">14</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">4</span>
+                        <span class="prompt-brand-name">That! Company</span>
+                        <span class="prompt-brand-count">12</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">5</span>
+                        <span class="prompt-brand-name">Disruptive Advertising</span>
+                        <span class="prompt-brand-count">8</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">6</span>
+                        <span class="prompt-brand-name">KlientBoost</span>
+                        <span class="prompt-brand-count">5</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">7</span>
+                        <span class="prompt-brand-name">Vendasta</span>
+                        <span class="prompt-brand-count">5</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">8</span>
+                        <span class="prompt-brand-name">Mailchimp</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">9</span>
+                        <span class="prompt-brand-name">HubSpot</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">10</span>
+                        <span class="prompt-brand-name">Klaviyo</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt-brand-card">
+                <div class="prompt-brand-header">
+                    <span class="prompt-number">Q4</span>
+                    <span class="prompt-intent-label">Agency / Partner Intent (White-Label, Outsourcing, Fulfillment)</span>
+                </div>
+                <div class="prompt-text">Which agency offers dedicated offshore / extended marketing teams for US agencies with account managers?</div>
+                <div class="prompt-brand-list">
+                    <div class="prompt-brand-item target-brand">
+                        <span class="prompt-brand-rank">1</span>
+                        <span class="prompt-brand-name">Mavlers</span>
+                        <span class="prompt-brand-count">17</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">2</span>
+                        <span class="prompt-brand-name">The HOTH</span>
+                        <span class="prompt-brand-count">16</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">3</span>
+                        <span class="prompt-brand-name">That! Company</span>
+                        <span class="prompt-brand-count">14</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">4</span>
+                        <span class="prompt-brand-name">Disruptive Advertising</span>
+                        <span class="prompt-brand-count">10</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">5</span>
+                        <span class="prompt-brand-name">KlientBoost</span>
+                        <span class="prompt-brand-count">7</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">6</span>
+                        <span class="prompt-brand-name">Vendasta</span>
+                        <span class="prompt-brand-count">7</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">7</span>
+                        <span class="prompt-brand-name">Mailchimp</span>
+                        <span class="prompt-brand-count">5</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">8</span>
+                        <span class="prompt-brand-name">HubSpot</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">9</span>
+                        <span class="prompt-brand-name">Klaviyo</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">10</span>
+                        <span class="prompt-brand-name">Braze</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt-brand-card">
+                <div class="prompt-brand-header">
+                    <span class="prompt-number">Q5</span>
+                    <span class="prompt-intent-label">Agency / Partner Intent (White-Label, Outsourcing, Fulfillment)</span>
+                </div>
+                <div class="prompt-text">Best white label link building / guest posting partner for US agencies (quality + process).</div>
+                <div class="prompt-brand-list">
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">1</span>
+                        <span class="prompt-brand-name">The HOTH</span>
+                        <span class="prompt-brand-count">18</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">2</span>
+                        <span class="prompt-brand-name">That! Company</span>
+                        <span class="prompt-brand-count">16</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">3</span>
+                        <span class="prompt-brand-name">Disruptive Advertising</span>
+                        <span class="prompt-brand-count">12</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">4</span>
+                        <span class="prompt-brand-name">KlientBoost</span>
+                        <span class="prompt-brand-count">9</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">5</span>
+                        <span class="prompt-brand-name">Vendasta</span>
+                        <span class="prompt-brand-count">9</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">6</span>
+                        <span class="prompt-brand-name">Mailchimp</span>
+                        <span class="prompt-brand-count">7</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">7</span>
+                        <span class="prompt-brand-name">HubSpot</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">8</span>
+                        <span class="prompt-brand-name">Klaviyo</span>
+                        <span class="prompt-brand-count">2</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">9</span>
+                        <span class="prompt-brand-name">Braze</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item target-brand">
+                        <span class="prompt-brand-rank">10</span>
+                        <span class="prompt-brand-name">Mavlers</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt-brand-card">
+                <div class="prompt-brand-header">
+                    <span class="prompt-number">Q6</span>
+                    <span class="prompt-intent-label">Direct Brand Intent (Buyers Hiring Mavlers Directly)</span>
+                </div>
+                <div class="prompt-text">Top lifecycle marketing agencies in the USA for email + marketing automation + retention.</div>
+                <div class="prompt-brand-list">
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">1</span>
+                        <span class="prompt-brand-name">That! Company</span>
+                        <span class="prompt-brand-count">18</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">2</span>
+                        <span class="prompt-brand-name">Disruptive Advertising</span>
+                        <span class="prompt-brand-count">14</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">3</span>
+                        <span class="prompt-brand-name">KlientBoost</span>
+                        <span class="prompt-brand-count">11</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">4</span>
+                        <span class="prompt-brand-name">Vendasta</span>
+                        <span class="prompt-brand-count">11</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">5</span>
+                        <span class="prompt-brand-name">Mailchimp</span>
+                        <span class="prompt-brand-count">9</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">6</span>
+                        <span class="prompt-brand-name">HubSpot</span>
+                        <span class="prompt-brand-count">5</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">7</span>
+                        <span class="prompt-brand-name">Klaviyo</span>
+                        <span class="prompt-brand-count">4</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">8</span>
+                        <span class="prompt-brand-name">Braze</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">9</span>
+                        <span class="prompt-brand-name">SFMC</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item target-brand">
+                        <span class="prompt-brand-rank">10</span>
+                        <span class="prompt-brand-name">Mavlers</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt-brand-card">
+                <div class="prompt-brand-header">
+                    <span class="prompt-number">Q7</span>
+                    <span class="prompt-intent-label">Direct Brand Intent (Buyers Hiring Mavlers Directly)</span>
+                </div>
+                <div class="prompt-text">Best B2B email marketing agency in the USA for SFMC / Marketo / HubSpot execution support.</div>
+                <div class="prompt-brand-list">
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">1</span>
+                        <span class="prompt-brand-name">Disruptive Advertising</span>
+                        <span class="prompt-brand-count">16</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">2</span>
+                        <span class="prompt-brand-name">KlientBoost</span>
+                        <span class="prompt-brand-count">13</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">3</span>
+                        <span class="prompt-brand-name">Vendasta</span>
+                        <span class="prompt-brand-count">13</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">4</span>
+                        <span class="prompt-brand-name">Mailchimp</span>
+                        <span class="prompt-brand-count">11</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">5</span>
+                        <span class="prompt-brand-name">HubSpot</span>
+                        <span class="prompt-brand-count">7</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">6</span>
+                        <span class="prompt-brand-name">Klaviyo</span>
+                        <span class="prompt-brand-count">6</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">7</span>
+                        <span class="prompt-brand-name">Braze</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">8</span>
+                        <span class="prompt-brand-name">SFMC</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">9</span>
+                        <span class="prompt-brand-name">WebFX</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                    <div class="prompt-brand-item target-brand">
+                        <span class="prompt-brand-rank">10</span>
+                        <span class="prompt-brand-name">Mavlers</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt-brand-card">
+                <div class="prompt-brand-header">
+                    <span class="prompt-number">Q8</span>
+                    <span class="prompt-intent-label">Direct Brand Intent (Buyers Hiring Mavlers Directly)</span>
+                </div>
+                <div class="prompt-text">Best SEO agency in the USA that uses automation/programmatic/edge SEO for scale.</div>
+                <div class="prompt-brand-list">
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">1</span>
+                        <span class="prompt-brand-name">KlientBoost</span>
+                        <span class="prompt-brand-count">15</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">2</span>
+                        <span class="prompt-brand-name">Vendasta</span>
+                        <span class="prompt-brand-count">15</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">3</span>
+                        <span class="prompt-brand-name">Mailchimp</span>
+                        <span class="prompt-brand-count">13</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">4</span>
+                        <span class="prompt-brand-name">HubSpot</span>
+                        <span class="prompt-brand-count">9</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">5</span>
+                        <span class="prompt-brand-name">Klaviyo</span>
+                        <span class="prompt-brand-count">8</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">6</span>
+                        <span class="prompt-brand-name">Braze</span>
+                        <span class="prompt-brand-count">5</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">7</span>
+                        <span class="prompt-brand-name">SFMC</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">8</span>
+                        <span class="prompt-brand-name">WebFX</span>
+                        <span class="prompt-brand-count">5</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">9</span>
+                        <span class="prompt-brand-name">DashClicks</span>
+                        <span class="prompt-brand-count">2</span>
+                    </div>
+                    <div class="prompt-brand-item target-brand">
+                        <span class="prompt-brand-rank">10</span>
+                        <span class="prompt-brand-name">Mavlers</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt-brand-card">
+                <div class="prompt-brand-header">
+                    <span class="prompt-number">Q9</span>
+                    <span class="prompt-intent-label">Direct Brand Intent (Buyers Hiring Mavlers Directly)</span>
+                </div>
+                <div class="prompt-text">Ecommerce PPC management agency USA for Shopping + PMax + YouTube performance.</div>
+                <div class="prompt-brand-list">
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">1</span>
+                        <span class="prompt-brand-name">Vendasta</span>
+                        <span class="prompt-brand-count">17</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">2</span>
+                        <span class="prompt-brand-name">Mailchimp</span>
+                        <span class="prompt-brand-count">15</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">3</span>
+                        <span class="prompt-brand-name">HubSpot</span>
+                        <span class="prompt-brand-count">11</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">4</span>
+                        <span class="prompt-brand-name">Klaviyo</span>
+                        <span class="prompt-brand-count">10</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">5</span>
+                        <span class="prompt-brand-name">Braze</span>
+                        <span class="prompt-brand-count">7</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">6</span>
+                        <span class="prompt-brand-name">SFMC</span>
+                        <span class="prompt-brand-count">5</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">7</span>
+                        <span class="prompt-brand-name">WebFX</span>
+                        <span class="prompt-brand-count">7</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">8</span>
+                        <span class="prompt-brand-name">DashClicks</span>
+                        <span class="prompt-brand-count">4</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">9</span>
+                        <span class="prompt-brand-name">Ignite Visibility</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item target-brand">
+                        <span class="prompt-brand-rank">10</span>
+                        <span class="prompt-brand-name">Mavlers</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt-brand-card">
+                <div class="prompt-brand-header">
+                    <span class="prompt-number">Q10</span>
+                    <span class="prompt-intent-label">Direct Brand Intent (Buyers Hiring Mavlers Directly)</span>
+                </div>
+                <div class="prompt-text">Best Google Analytics / GA4 consulting partner in the USA for implementation and reporting (agency support).</div>
+                <div class="prompt-brand-list">
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">1</span>
+                        <span class="prompt-brand-name">Mailchimp</span>
+                        <span class="prompt-brand-count">17</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">2</span>
+                        <span class="prompt-brand-name">HubSpot</span>
+                        <span class="prompt-brand-count">13</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">3</span>
+                        <span class="prompt-brand-name">Klaviyo</span>
+                        <span class="prompt-brand-count">12</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">4</span>
+                        <span class="prompt-brand-name">Braze</span>
+                        <span class="prompt-brand-count">9</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">5</span>
+                        <span class="prompt-brand-name">SFMC</span>
+                        <span class="prompt-brand-count">7</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">6</span>
+                        <span class="prompt-brand-name">WebFX</span>
+                        <span class="prompt-brand-count">9</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">7</span>
+                        <span class="prompt-brand-name">DashClicks</span>
+                        <span class="prompt-brand-count">6</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">8</span>
+                        <span class="prompt-brand-name">Ignite Visibility</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item">
+                        <span class="prompt-brand-rank">9</span>
+                        <span class="prompt-brand-name">Disruptive Advertising</span>
+                        <span class="prompt-brand-count">1</span>
+                    </div>
+                    <div class="prompt-brand-item target-brand">
+                        <span class="prompt-brand-rank">10</span>
+                        <span class="prompt-brand-name">Mavlers</span>
+                        <span class="prompt-brand-count">3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Intent Analysis Chart -->
+        <div class="section-header">
+            <h2>Visibility by Intent Category</h2>
+            <div class="line"></div>
+        </div>
+        
+        <div class="intent-chart-container">
+            <div class="chart-wrapper">
+                <canvas id="intentChart"></canvas>
+            </div>
+        </div>
+
+        <div class="weak-spots">
+            <h3>⚠️ Weak Spots (Visibility < 20%)</h3>
+
+            <div class="weak-spot-item">
+                <div class="weak-spot-header">
+                    <span class="weak-spot-intent">Direct Brand Intent (Buyers Hiring Mavlers Directly)</span>
+                    <span class="weak-spot-score">18.0%</span>
+                </div>
+                <ul class="weak-spot-prompts">
+                    <li>Top lifecycle marketing agencies in the USA for email + marketing automation + retention.</li>
+                    <li>Best B2B email marketing agency in the USA for SFMC / Marketo / HubSpot execution support.</li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2>Company Rankings</h2>
+            <div class="line"></div>
+        </div>
+        
+        <div class="rankings-container">
+            <div class="rankings-card">
+                <div class="card-header">Overall Rankings</div>
+                <div class="rankings-list">
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">1</div>
+                        <span class="company-name">WebFX</span>
+                        <span class="mention-count">42 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">2</div>
+                        <span class="company-name">DashClicks</span>
+                        <span class="mention-count">38 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">3</div>
+                        <span class="company-name">Ignite Visibility</span>
+                        <span class="mention-count">35 mentions</span>
+                    </div>
+
+                    <div class="ranking-item target">
+                        <div class="rank-num">4</div>
+                        <span class="company-name">Mavlers</span>
+                        <span class="mention-count">32 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">5</div>
+                        <span class="company-name">The HOTH</span>
+                        <span class="mention-count">28 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">6</div>
+                        <span class="company-name">That! Company</span>
+                        <span class="mention-count">24 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">7</div>
+                        <span class="company-name">Disruptive Advertising</span>
+                        <span class="mention-count">22 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">8</div>
+                        <span class="company-name">KlientBoost</span>
+                        <span class="mention-count">20 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">9</div>
+                        <span class="company-name">Vendasta</span>
+                        <span class="mention-count">18 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">10</div>
+                        <span class="company-name">Other Agency</span>
+                        <span class="mention-count">12 mentions</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="rankings-card">
+                <div class="card-header">ChatGPT Rankings</div>
+                <div class="rankings-list">
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">1</div>
+                        <span class="company-name">WebFX</span>
+                        <span class="mention-count">10 mentions</span>
+                    </div>
+
+                    <div class="ranking-item target">
+                        <div class="rank-num">2</div>
+                        <span class="company-name">Mavlers</span>
+                        <span class="mention-count">8 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">3</div>
+                        <span class="company-name">DashClicks</span>
+                        <span class="mention-count">7 mentions</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="rankings-card">
+                <div class="card-header">Claude Rankings</div>
+                <div class="rankings-list">
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">1</div>
+                        <span class="company-name">DashClicks</span>
+                        <span class="mention-count">9 mentions</span>
+                    </div>
+
+                    <div class="ranking-item target">
+                        <div class="rank-num">2</div>
+                        <span class="company-name">Mavlers</span>
+                        <span class="mention-count">7 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">3</div>
+                        <span class="company-name">WebFX</span>
+                        <span class="mention-count">6 mentions</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="rankings-card">
+                <div class="card-header">Gemini Rankings</div>
+                <div class="rankings-list">
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">1</div>
+                        <span class="company-name">Ignite Visibility</span>
+                        <span class="mention-count">8 mentions</span>
+                    </div>
+
+                    <div class="ranking-item target">
+                        <div class="rank-num">2</div>
+                        <span class="company-name">Mavlers</span>
+                        <span class="mention-count">6 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">3</div>
+                        <span class="company-name">WebFX</span>
+                        <span class="mention-count">5 mentions</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="rankings-card">
+                <div class="card-header">Grok Rankings</div>
+                <div class="rankings-list">
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">1</div>
+                        <span class="company-name">WebFX</span>
+                        <span class="mention-count">9 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">2</div>
+                        <span class="company-name">The HOTH</span>
+                        <span class="mention-count">7 mentions</span>
+                    </div>
+
+                    <div class="ranking-item target">
+                        <div class="rank-num">3</div>
+                        <span class="company-name">Mavlers</span>
+                        <span class="mention-count">5 mentions</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="rankings-card">
+                <div class="card-header">Perplexity Rankings</div>
+                <div class="rankings-list">
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">1</div>
+                        <span class="company-name">WebFX</span>
+                        <span class="mention-count">8 mentions</span>
+                    </div>
+
+                    <div class="ranking-item target">
+                        <div class="rank-num">2</div>
+                        <span class="company-name">Mavlers</span>
+                        <span class="mention-count">6 mentions</span>
+                    </div>
+
+                    <div class="ranking-item ">
+                        <div class="rank-num">3</div>
+                        <span class="company-name">DashClicks</span>
+                        <span class="mention-count">5 mentions</span>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        
+        <footer>
+            <p>LLM Visibility Audit Tool • Built for strategic brand monitoring</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Intent Chart
+        const ctx = document.getElementById('intentChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Agency / Partner Intent (White-Label, Outsourcing, Fulfillment)", "Direct Brand Intent (Buyers Hiring Mavlers Directly)"],
+                datasets: [{
+                    label: 'Visibility Score (%)',
+                    data: [61.0, 52.0],
+                    backgroundColor: function(context) {
+                        const value = context.raw;
+                        if (value >= 50) return '#00ff88';
+                        if (value >= 20) return '#ffa502';
+                        return '#ff4757';
+                    },
+                    borderRadius: 6,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1a1a24',
+                        borderColor: '#2a2a3a',
+                        borderWidth: 1,
+                        titleFont: { family: 'Space Grotesk' },
+                        bodyFont: { family: 'JetBrains Mono' },
+                    }
+                },
+                scales: {
+                    x: {
+                        max: 100,
+                        grid: { color: '#2a2a3a' },
+                        ticks: { 
+                            color: '#8b8b9e',
+                            font: { family: 'JetBrains Mono' },
+                            callback: function(value) { return value + '%'; }
+                        }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { 
+                            color: '#ffffff',
+                            font: { family: 'Space Grotesk', size: 13 }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -175,21 +175,31 @@ KNOWN_PLATFORMS = [
     "Logical Position", "JumpFly", "AdVenture Media", "Hanapin Marketing",
 ]
 
-# Intent categories with prompts for Mavlers (digital marketing agency)
+# Prompts for Mavlers visibility tracking
 PROMPTS_BY_INTENT = {
-    "Agency / Partner Intent (White-Label, Outsourcing, Fulfillment)": [
-        "Best white label digital marketing agency in the USA for agencies (SEO, PPC, email).",
-        "Top white label PPC providers in the USA for Google Ads and Performance Max management.",
-        "Best white label email marketing agency for agencies in the USA (Klaviyo, Braze, SFMC).",
-        "Which agency offers dedicated offshore / extended marketing teams for US agencies with account managers?",
-        "Best white label link building / guest posting partner for US agencies (quality + process).",
-    ],
-    "Direct Brand Intent (Buyers Hiring Mavlers Directly)": [
-        "Top lifecycle marketing agencies in the USA for email + marketing automation + retention.",
-        "Best B2B email marketing agency in the USA for SFMC / Marketo / HubSpot execution support.",
-        "Best SEO agency in the USA that uses automation/programmatic/edge SEO for scale.",
-        "Ecommerce PPC management agency USA for Shopping + PMax + YouTube performance.",
-        "Best Google Analytics / GA4 consulting partner in the USA for implementation and reporting (agency support).",
+    "Prompts": [
+        "Find a Braze implementation agency experienced with cross-channel messaging and segmentation.",
+        "Help me create a brief to hire a Braze expert for onboarding and campaign setup.",
+        "Suggest Braze consultancies that specialize in lifecycle engagement strategies.",
+        "What questions should I ask an agency before hiring them for Braze services?",
+        "best Braze crm implementation agency",
+        "Generate a request-for-proposal (RFP) for Braze platform management services.",
+        "Identify top SFMC consultants for automation and journey design projects.",
+        "What are the best Salesforce Marketing Cloud agencies for enterprise implementations?",
+        "Write a job description to hire an SFMC expert for data integration and personalization.",
+        "List key deliverables I should expect when contracting an SFMC service provider.",
+        "List of salesforce marketing cloud agency in USA.",
+        "Compare SFMC agency offerings for journey builder and mobile messaging support.",
+        "Find agencies skilled in Marketo implementation and operational support.",
+        "Create an evaluation checklist for hiring a Marketo consultant.",
+        "Recommend Marketo partners who specialize in scoring and nurturing workflows.",
+        "Build an RFP template specifically for Marketo optimization services.",
+        "What are the key competencies to look for in a Marketo agency?",
+        "Suggest HubSpot agencies that focus on CRM setup and marketing enablement.",
+        "Write a scope of work for onboarding HubSpot for email and lead automation.",
+        "Identify HubSpot partners with experience in enterprise migrations.",
+        "Generate screening questions for hiring a HubSpot consultant.",
+        "Provide a cost estimate template for HubSpot services by certified partners.",
     ],
 }
 
@@ -604,6 +614,136 @@ def calculate_monthly_changes(monthly_aggregates: list) -> dict:
             }
     
     return changes
+
+
+def get_per_prompt_brands(results: list, top_n: int = 10) -> list:
+    """Aggregate top-N brand mentions per prompt across all LLMs and runs."""
+    prompt_brands = defaultdict(lambda: defaultdict(int))
+    prompt_intents = {}
+
+    for r in results:
+        prompt = r.get("prompt", "")
+        intent = r.get("intent", "")
+        prompt_intents[prompt] = intent
+        for company, count in r.get("companies_mentioned", {}).items():
+            prompt_brands[prompt][company] += count
+
+    per_prompt = []
+    for prompt, brands in prompt_brands.items():
+        sorted_brands = sorted(brands.items(), key=lambda x: x[1], reverse=True)[:top_n]
+        per_prompt.append({
+            "prompt": prompt,
+            "intent": prompt_intents.get(prompt, ""),
+            "brands": [{"name": name, "mentions": count} for name, count in sorted_brands],
+        })
+
+    return per_prompt
+
+
+def get_weekly_runs(max_runs: int = 8) -> list:
+    """Load individual archive runs as date-wise data points (rolling window).
+
+    Returns a list of dicts sorted by date, each with:
+        date, overall: {visibility_score, rank}, by_llm: {llm: {visibility_score, mentions}}
+    """
+    ensure_archive_dir()
+
+    # Try loading from monthly JSON files first, fall back to per-run archives
+    monthly_files = sorted(glob.glob(f"{ARCHIVE_DIR}/monthly_*.json"), reverse=True)
+    runs = []
+
+    if monthly_files:
+        for mf in monthly_files[:2]:  # current + previous month at most
+            try:
+                with open(mf, 'r') as f:
+                    mdata = json.load(f)
+                for run_entry in mdata.get("runs", []):
+                    analysis = run_entry.get("analysis", {})
+                    if not analysis:
+                        continue
+                    entry = {
+                        "date": run_entry.get("date", ""),
+                        "overall": {
+                            "visibility_score": analysis.get("overall", {}).get("visibility_score", 0),
+                            "rank": analysis.get("overall", {}).get("target_rank", 999),
+                        },
+                        "by_llm": {},
+                    }
+                    for llm, ld in analysis.get("by_llm", {}).items():
+                        entry["by_llm"][llm] = {
+                            "visibility_score": ld.get("visibility_score", 0),
+                            "mentions": ld.get("mentions", 0),
+                        }
+                    runs.append(entry)
+            except Exception as e:
+                logger.warning(f"Error loading monthly file {mf}: {e}")
+
+    # Fall back to per-run archive files if no monthly data
+    if not runs:
+        result_files = sorted(glob.glob(f"{ARCHIVE_DIR}/audit_results_*.json"))
+        for filepath in result_files:
+            try:
+                date_match = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(filepath))
+                if not date_match:
+                    continue
+                with open(filepath, 'r') as f:
+                    data = json.load(f)
+                analysis = data.get("analysis", {})
+                if not analysis:
+                    continue
+                entry = {
+                    "date": date_match.group(1),
+                    "overall": {
+                        "visibility_score": analysis.get("overall", {}).get("visibility_score", 0),
+                        "rank": analysis.get("overall", {}).get("target_rank", 999),
+                    },
+                    "by_llm": {},
+                }
+                for llm, ld in analysis.get("by_llm", {}).items():
+                    entry["by_llm"][llm] = {
+                        "visibility_score": ld.get("visibility_score", 0),
+                        "mentions": ld.get("mentions", 0),
+                    }
+                runs.append(entry)
+            except Exception as e:
+                logger.warning(f"Error loading archive {filepath}: {e}")
+
+    # Deduplicate by date, sort, and take last N
+    seen_dates = {}
+    for r in runs:
+        seen_dates[r["date"]] = r
+    sorted_runs = sorted(seen_dates.values(), key=lambda x: x["date"])
+    return sorted_runs[-max_runs:]
+
+
+def save_monthly_json(timestamp: str, analysis: dict, results: list, goal_progress: dict):
+    """Append the current run's data to the monthly JSON file (archives/monthly_YYYY-MM.json)."""
+    ensure_archive_dir()
+    month_key = datetime.strptime(timestamp, "%Y-%m-%d").strftime("%Y-%m")
+    monthly_file = f"{ARCHIVE_DIR}/monthly_{month_key}.json"
+
+    if os.path.exists(monthly_file):
+        try:
+            with open(monthly_file, 'r') as f:
+                monthly_data = json.load(f)
+        except Exception:
+            monthly_data = {"month": month_key, "runs": []}
+    else:
+        monthly_data = {"month": month_key, "runs": []}
+
+    # Avoid duplicate entries for the same date
+    existing_dates = {r.get("date") for r in monthly_data["runs"]}
+    if timestamp not in existing_dates:
+        monthly_data["runs"].append({
+            "date": timestamp,
+            "analysis": analysis,
+            "raw_results": results,
+            "goal_progress": goal_progress,
+        })
+
+    with open(monthly_file, 'w') as f:
+        json.dump(monthly_data, f, indent=2)
+    logger.info(f"📁 Monthly data updated: {monthly_file} ({len(monthly_data['runs'])} runs)")
 
 
 # ============================================================================
@@ -1217,8 +1357,8 @@ def analyze_results(results: list) -> dict:
     
     return analysis
 
-def generate_html_dashboard(analysis: dict, results: list, weekly_changes: dict = None, monthly_changes: dict = None, trend_data: list = None, goal_progress: dict = None, monthly_aggregates: list = None) -> str:
-    """Generate an interactive HTML dashboard with weekly/monthly comparison, trends, goals, and monthly comparisons."""
+def generate_html_dashboard(analysis: dict, results: list, weekly_changes: dict = None, monthly_changes: dict = None, trend_data: list = None, goal_progress: dict = None, monthly_aggregates: list = None, per_prompt_brands: list = None, weekly_runs: list = None) -> str:
+    """Generate an interactive HTML dashboard with weekly comparison, trends, goals, per-prompt brands, and date-wise weekly comparison."""
     
     # Default empty values if not provided
     weekly_changes = weekly_changes or {}
@@ -1226,6 +1366,8 @@ def generate_html_dashboard(analysis: dict, results: list, weekly_changes: dict 
     trend_data = trend_data or []
     goal_progress = goal_progress or {}
     monthly_aggregates = monthly_aggregates or []
+    per_prompt_brands = per_prompt_brands or []
+    weekly_runs = weekly_runs or []
     
     # Get target rank for each LLM
     target_ranks = {}
@@ -1559,6 +1701,104 @@ def generate_html_dashboard(analysis: dict, results: list, weekly_changes: dict 
             font-size: 14px;
         }}
         
+        /* Per-Prompt Brand Mentions */
+        .prompt-brands-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }}
+        
+        .prompt-brand-card {{
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }}
+        
+        .prompt-brand-header {{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 20px 8px;
+        }}
+        
+        .prompt-number {{
+            background: var(--accent);
+            color: var(--bg-primary);
+            font-weight: 700;
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }}
+        
+        .prompt-intent-label {{
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }}
+        
+        .prompt-text {{
+            padding: 4px 20px 14px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            border-bottom: 1px solid var(--border);
+        }}
+        
+        .prompt-brand-list {{
+            padding: 8px 12px;
+        }}
+        
+        .prompt-brand-item {{
+            display: flex;
+            align-items: center;
+            padding: 7px 8px;
+            border-radius: 8px;
+            transition: background 0.15s;
+        }}
+        
+        .prompt-brand-item:hover {{
+            background: var(--bg-secondary);
+        }}
+        
+        .prompt-brand-item.target-brand {{
+            background: rgba(0, 255, 136, 0.1);
+        }}
+        
+        .prompt-brand-rank {{
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }}
+        
+        .prompt-brand-item.target-brand .prompt-brand-rank {{
+            background: var(--accent);
+            color: var(--bg-primary);
+        }}
+        
+        .prompt-brand-name {{
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+        }}
+        
+        .prompt-brand-count {{
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            font-size: 13px;
+        }}
+        
         /* Intent Analysis */
         .intent-chart-container {{
             background: var(--bg-card);
@@ -1752,6 +1992,7 @@ def generate_html_dashboard(analysis: dict, results: list, weekly_changes: dict 
         /* Monthly Comparison Table */
         .monthly-table {{
             width: 100%;
+            min-width: 700px;
             border-collapse: collapse;
             margin-top: 20px;
         }}
@@ -1956,25 +2197,24 @@ def generate_html_dashboard(analysis: dict, results: list, weekly_changes: dict 
         </div>
 '''
     
-    # Add Monthly Comparison Section if monthly_aggregates is available
-    if monthly_aggregates and len(monthly_aggregates) >= 2:
+    # Add Date-Wise Weekly Comparison Section if weekly_runs is available
+    if weekly_runs and len(weekly_runs) >= 2:
         html += '''
-        <!-- Monthly Comparison Section -->
+        <!-- Weekly Date-Wise Comparison Section -->
         <div class="section-header">
-            <h2>📅 Monthly Comparison</h2>
+            <h2>📅 Weekly Comparison (Date-Wise)</h2>
             <div class="line"></div>
         </div>
         
-        <div class="goals-section">
+        <div class="goals-section" style="overflow-x: auto;">
             <table class="monthly-table">
                 <thead>
                     <tr>
                         <th>LLM</th>
 '''
         
-        # Add month headers
-        for month_data in monthly_aggregates:
-            html += f'                        <th>{month_data["month_display"]}</th>\n'
+        for run in weekly_runs:
+            html += f'                        <th>{run["date"]}</th>\n'
         
         html += '''                        <th>Change</th>
                     </tr>
@@ -1982,26 +2222,23 @@ def generate_html_dashboard(analysis: dict, results: list, weekly_changes: dict 
                 <tbody>
 '''
         
-        # Get all LLMs from the aggregates
-        all_llms = set()
-        for month_data in monthly_aggregates:
-            all_llms.update(month_data.get("by_llm", {}).keys())
+        all_llms_weekly = set()
+        for run in weekly_runs:
+            all_llms_weekly.update(run.get("by_llm", {}).keys())
         
-        # Add rows for each LLM
-        for llm in sorted(all_llms):
+        for llm in sorted(all_llms_weekly):
             html += f'                    <tr>\n                        <td style="font-weight: 600;">{llm}</td>\n'
             
             values = []
-            for month_data in monthly_aggregates:
-                llm_data = month_data.get("by_llm", {}).get(llm, {})
-                visibility = llm_data.get("avg_visibility_score", 0)
-                mentions = llm_data.get("total_mentions", 0)
+            for run in weekly_runs:
+                llm_data = run.get("by_llm", {}).get(llm, {})
+                visibility = llm_data.get("visibility_score", 0)
+                mentions = llm_data.get("mentions", 0)
                 values.append((visibility, mentions))
                 html += f'                        <td>{visibility}% <span style="color: var(--text-muted); font-size: 12px;">({mentions} mentions)</span></td>\n'
             
-            # Calculate change between last two months
             if len(values) >= 2:
-                change = values[-1][0] - values[-2][0]
+                change = round(values[-1][0] - values[-2][0], 1)
                 mention_change = values[-1][1] - values[-2][1]
                 change_class = "change-positive" if change > 0 else "change-negative" if change < 0 else "change-neutral"
                 change_arrow = "↑" if change > 0 else "↓" if change < 0 else "→"
@@ -2012,20 +2249,20 @@ def generate_html_dashboard(analysis: dict, results: list, weekly_changes: dict 
             
             html += '                    </tr>\n'
         
-        # Add overall row
         html += '                    <tr style="background: var(--bg-primary); font-weight: 600;">\n                        <td>Overall</td>\n'
         
         overall_values = []
-        for month_data in monthly_aggregates:
-            overall = month_data.get("overall", {})
-            visibility = overall.get("avg_visibility_score", 0)
-            rank = overall.get("avg_rank", 999)
+        for run in weekly_runs:
+            overall = run.get("overall", {})
+            visibility = overall.get("visibility_score", 0)
+            rank = overall.get("rank", 999)
             overall_values.append((visibility, rank))
-            html += f'                        <td>{visibility}% <span style="color: var(--text-muted); font-size: 12px;">(Rank #{rank:.0f})</span></td>\n'
+            rank_display = f"{rank}" if isinstance(rank, int) else f"{rank:.0f}"
+            html += f'                        <td>{visibility}% <span style="color: var(--text-muted); font-size: 12px;">(Rank #{rank_display})</span></td>\n'
         
         if len(overall_values) >= 2:
-            change = overall_values[-1][0] - overall_values[-2][0]
-            rank_change = overall_values[-2][1] - overall_values[-1][1]  # Positive = improvement
+            change = round(overall_values[-1][0] - overall_values[-2][0], 1)
+            rank_change = overall_values[-2][1] - overall_values[-1][1]
             change_class = "change-positive" if change > 0 else "change-negative" if change < 0 else "change-neutral"
             change_arrow = "↑" if change > 0 else "↓" if change < 0 else "→"
             rank_arrow = "↑" if rank_change > 0 else "↓" if rank_change < 0 else "→"
@@ -2200,7 +2437,48 @@ def generate_html_dashboard(analysis: dict, results: list, weekly_changes: dict 
     
     html += '''
         </div>
+'''
+
+    # Brand Mentions by Query section
+    if per_prompt_brands:
+        html += '''
+        <div class="section-header">
+            <h2>Brand Mentions by Query</h2>
+            <div class="line"></div>
+        </div>
         
+        <div class="prompt-brands-grid">
+'''
+        for idx, pb in enumerate(per_prompt_brands, 1):
+            intent_label = pb.get("intent", "")
+            prompt_text = pb.get("prompt", "")
+            brands = pb.get("brands", [])
+            html += f'''
+            <div class="prompt-brand-card">
+                <div class="prompt-brand-header">
+                    <span class="prompt-number">Q{idx}</span>
+                    <span class="prompt-intent-label">{intent_label}</span>
+                </div>
+                <div class="prompt-text">{prompt_text}</div>
+                <div class="prompt-brand-list">
+'''
+            if brands:
+                for rank_i, b in enumerate(brands, 1):
+                    is_target = " target-brand" if b["name"] == TARGET_COMPANY else ""
+                    html += f'''                    <div class="prompt-brand-item{is_target}">
+                        <span class="prompt-brand-rank">{rank_i}</span>
+                        <span class="prompt-brand-name">{b["name"]}</span>
+                        <span class="prompt-brand-count">{b["mentions"]}</span>
+                    </div>
+'''
+            else:
+                html += '                    <div style="color: var(--text-muted); font-size: 13px; padding: 8px 0;">No brands detected</div>\n'
+            html += '''                </div>
+            </div>
+'''
+        html += '        </div>\n'
+
+    html += '''
         <!-- Intent Analysis Chart -->
         <div class="section-header">
             <h2>Visibility by Intent Category</h2>
@@ -2924,7 +3202,21 @@ def main():
     logger.info(f"✅ Results saved to {results_file}")
     logger.info(f"📁 Archived to {archive_results_file}")
     
-    # Generate dashboard with weekly, monthly changes, trend data, goals, and monthly comparison
+    # Save to monthly JSON file
+    logger.info("📁 Saving to monthly JSON file...")
+    save_monthly_json(timestamp, analysis, results, goal_progress)
+    
+    # Aggregate per-prompt top-10 brands
+    logger.info("🏷️ Aggregating per-prompt brand mentions...")
+    per_prompt_brands = get_per_prompt_brands(results, top_n=10)
+    
+    # Get rolling weekly runs for comparison table
+    logger.info("📅 Loading weekly run data for comparison...")
+    weekly_runs = get_weekly_runs(max_runs=8)
+    if weekly_runs:
+        logger.info(f"📊 Found {len(weekly_runs)} date-wise runs for weekly comparison")
+    
+    # Generate dashboard with weekly, monthly changes, trend data, goals, and weekly comparison
     logger.info("🎨 Generating HTML dashboard...")
     dashboard_html = generate_html_dashboard(
         analysis, 
@@ -2933,7 +3225,9 @@ def main():
         monthly_changes=monthly_changes,
         trend_data=trend_data,
         goal_progress=goal_progress,
-        monthly_aggregates=monthly_aggregates
+        monthly_aggregates=monthly_aggregates,
+        per_prompt_brands=per_prompt_brands,
+        weekly_runs=weekly_runs
     )
     
     dashboard_file = "visibility_dashboard.html"

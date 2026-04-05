@@ -1908,3 +1908,286 @@
 2026-03-29 08:05:21,487 - INFO -    Raw data: audit_results.json
 2026-03-29 08:05:21,487 - INFO -    Screenshot: visibility_dashboard_2026-03-29.png
 2026-03-29 08:05:21,487 - INFO -    Archives: archives/
+2026-04-05 07:07:52,806 - INFO - 
+============================================================
+2026-04-05 07:07:52,806 - INFO - 🚀 STARTING LLM VISIBILITY AUDIT
+2026-04-05 07:07:52,806 - INFO - ============================================================
+2026-04-05 07:07:52,806 - INFO - Target Company: Mavlers
+2026-04-05 07:07:52,806 - INFO - Target Region: USA
+2026-04-05 07:07:52,806 - INFO - Prompt Categories: 1
+2026-04-05 07:07:52,806 - INFO - Total Prompts: 22
+2026-04-05 07:07:52,806 - INFO - Runs per Prompt: 3
+2026-04-05 07:07:52,806 - INFO - Archive Retention: 12 weeks
+2026-04-05 07:07:52,806 - INFO - Email Notifications: Enabled
+2026-04-05 07:07:52,812 - INFO - 📊 Found previous audit from 2026-03-29
+2026-04-05 07:07:52,824 - INFO - 📅 Found monthly comparison data from 2026-03-08
+2026-04-05 07:07:52,824 - INFO - 📅 Found monthly comparison data from 2026-03-08
+2026-04-05 07:07:52,886 - INFO - 📈 Found 11 historical data points for trend analysis
+2026-04-05 07:07:53,366 - INFO - ✅ OpenAI client initialized
+2026-04-05 07:07:53,649 - INFO - ✅ Anthropic client initialized
+2026-04-05 07:07:54,318 - INFO - ✅ Google Gemini client initialized with 2026 model (gemini-2.5-flash)
+2026-04-05 07:07:54,318 - INFO - ✅ xAI Grok client initialized
+2026-04-05 07:07:58,930 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:08:03,592 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:08:08,377 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:08:20,155 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:08:30,600 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:08:40,664 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:08:43,665 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:08:44,897 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:08:47,898 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:08:48,678 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:08:51,680 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:08:53,242 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:10:17,873 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:10:24,809 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:10:29,927 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:10:47,266 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:11:05,393 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:11:19,343 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:11:22,345 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:11:24,632 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:11:27,633 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:11:29,214 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:11:32,216 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:11:33,263 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:12:35,843 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:12:41,849 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:12:47,398 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:12:57,078 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:13:07,316 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:13:18,233 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:13:21,235 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:13:22,831 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:13:25,833 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:13:29,066 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:13:32,068 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:13:37,580 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:14:42,284 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:14:48,459 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:14:53,075 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:15:02,564 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:15:11,862 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:15:26,092 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:15:29,094 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:15:30,217 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:15:33,219 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:15:34,197 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:15:37,199 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:15:38,277 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:15:47,548 - WARNING - Attempt 1/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 5s...
+2026-04-05 07:15:59,821 - WARNING - Attempt 2/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 10s...
+2026-04-05 07:17:15,416 - WARNING - Attempt 1/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 5s...
+2026-04-05 07:17:28,504 - WARNING - Attempt 2/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 10s...
+2026-04-05 07:19:23,903 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:19:29,839 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:19:34,311 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:19:45,370 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:19:54,754 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:20:04,871 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:20:07,873 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:20:09,055 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:20:12,057 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:20:13,075 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:20:16,076 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:20:17,547 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-05 07:21:47,228 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:22:01,427 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:22:09,995 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:22:41,911 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:23:11,756 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:23:40,430 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:23:43,433 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:23:43,603 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-04-05 07:23:43,603 - ERROR - ❌ Error querying Gemini: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 16.446203957s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '16s'}]}}
+2026-04-05 07:23:46,604 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:23:46,716 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-04-05 07:23:46,717 - ERROR - ❌ Error querying Gemini: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 13.324785314s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '13s'}]}}
+2026-04-05 07:23:49,718 - INFO - AFC is enabled with max remote calls: 10.
+2026-04-05 07:23:49,828 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-04-05 07:23:49,829 - ERROR - ❌ Error querying Gemini: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 10.217541493s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '10s'}]}}
+2026-04-05 07:23:49,829 - WARNING - ⏭️  Skipping Gemini for remaining queries (3 consecutive failures)
+2026-04-05 07:25:29,044 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:25:34,331 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:25:39,582 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:25:51,189 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:26:03,050 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:26:14,407 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:27:46,205 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:27:52,927 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:27:58,546 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:28:11,080 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:28:22,362 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:28:36,451 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:30:33,894 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:30:40,090 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:30:47,384 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:31:11,360 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:31:33,858 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:31:56,839 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:33:26,675 - WARNING - Attempt 1/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 5s...
+2026-04-05 07:33:38,347 - WARNING - Attempt 2/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 10s...
+2026-04-05 07:33:55,813 - WARNING - Attempt 3/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 20s...
+2026-04-05 07:34:15,814 - ERROR - All 3 attempts failed for _query: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions
+2026-04-05 07:34:21,690 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:34:26,943 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:34:31,991 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:34:45,257 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:34:57,916 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:35:12,798 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:36:47,310 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:36:52,622 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:36:57,547 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:37:11,775 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:37:22,289 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:37:34,198 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:38:43,916 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:38:52,424 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:38:59,891 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:39:13,764 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:39:27,875 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:39:40,649 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:41:25,095 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:41:30,013 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:41:33,780 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:41:44,187 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:41:54,221 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:42:04,842 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:43:04,905 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:43:10,030 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:43:15,902 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:43:43,999 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:44:11,450 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:44:37,359 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:44:47,987 - WARNING - Attempt 1/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 5s...
+2026-04-05 07:45:24,016 - WARNING - Attempt 1/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 5s...
+2026-04-05 07:45:37,588 - WARNING - Attempt 2/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 10s...
+2026-04-05 07:45:55,064 - WARNING - Attempt 3/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 20s...
+2026-04-05 07:46:15,064 - ERROR - All 3 attempts failed for _query: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions
+2026-04-05 07:46:24,434 - WARNING - Attempt 1/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 5s...
+2026-04-05 07:46:36,235 - WARNING - Attempt 2/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 10s...
+2026-04-05 07:46:53,625 - WARNING - Attempt 3/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 20s...
+2026-04-05 07:47:13,625 - ERROR - All 3 attempts failed for _query: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions
+2026-04-05 07:47:18,382 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:47:23,562 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:47:26,685 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:47:38,031 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:47:48,430 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:47:58,796 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:49:03,250 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:49:12,757 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:49:19,570 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:49:47,243 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:50:18,694 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:50:48,595 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:52:14,608 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:52:18,827 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:52:24,356 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:52:34,689 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:52:49,500 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:53:00,212 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:54:25,862 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:54:29,862 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:54:33,356 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:54:43,730 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:54:54,503 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:55:05,798 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:56:16,384 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:56:22,730 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:56:29,818 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 07:57:03,624 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:57:34,937 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 07:58:03,847 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 08:00:17,341 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 08:00:23,150 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 08:00:30,213 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 08:00:41,428 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 08:00:52,481 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 08:01:03,157 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 08:03:06,488 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 08:03:12,529 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 08:03:17,308 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 08:03:38,138 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 08:03:56,373 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 08:04:14,727 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 08:05:47,370 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 08:05:54,377 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 08:06:04,511 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 08:06:30,926 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 08:06:54,747 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 08:07:17,884 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-04-05 08:07:30,502 - WARNING - Attempt 1/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 5s...
+2026-04-05 08:07:43,705 - WARNING - Attempt 2/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 10s...
+2026-04-05 08:08:02,302 - WARNING - Attempt 3/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 20s...
+2026-04-05 08:08:22,302 - ERROR - All 3 attempts failed for _query: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions
+2026-04-05 08:08:30,929 - WARNING - Attempt 1/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 5s...
+2026-04-05 08:08:43,750 - WARNING - Attempt 2/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 10s...
+2026-04-05 08:09:02,099 - WARNING - Attempt 3/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 20s...
+2026-04-05 08:09:22,099 - ERROR - All 3 attempts failed for _query: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions
+2026-04-05 08:09:31,613 - WARNING - Attempt 1/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 5s...
+2026-04-05 08:09:43,551 - WARNING - Attempt 2/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 10s...
+2026-04-05 08:10:01,527 - WARNING - Attempt 3/3 failed: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions. Retrying in 20s...
+2026-04-05 08:10:21,527 - ERROR - All 3 attempts failed for _query: 503 Server Error: Service Unavailable for url: https://api.x.ai/v1/chat/completions
+2026-04-05 08:10:21,527 - WARNING - ⏭️  Skipping Grok for remaining queries (3 consecutive failures)
+2026-04-05 08:10:22,528 - INFO - 📊 Analyzing results...
+2026-04-05 08:10:22,533 - INFO - 🎯 Calculating goal progress...
+2026-04-05 08:10:22,533 - INFO - 📅 Getting monthly aggregates (last 3 months)...
+2026-04-05 08:10:22,594 - INFO - 📊 Found 3 months of historical data for comparison
+2026-04-05 08:10:22,612 - INFO - ✅ Results saved to audit_results.json
+2026-04-05 08:10:22,612 - INFO - 📁 Archived to archives/audit_results_2026-04-05.json
+2026-04-05 08:10:22,612 - INFO - 📁 Saving to monthly JSON file...
+2026-04-05 08:10:22,632 - INFO - 📁 Monthly data updated: archives/monthly_2026-04.json (1 runs)
+2026-04-05 08:10:22,632 - INFO - 🏷️ Aggregating per-prompt brand mentions...
+2026-04-05 08:10:22,633 - INFO - 📅 Loading weekly run data for comparison...
+2026-04-05 08:10:22,658 - INFO - 📊 Found 6 date-wise runs for weekly comparison
+2026-04-05 08:10:22,658 - INFO - 🎨 Generating HTML dashboard...
+2026-04-05 08:10:22,659 - INFO - ✅ Dashboard saved to visibility_dashboard.html
+2026-04-05 08:10:22,659 - INFO - 📁 Archived to archives/visibility_dashboard_2026-04-05.html
+2026-04-05 08:10:22,684 - INFO - 📸 Capturing screenshot of visibility_dashboard.html...
+2026-04-05 08:10:26,084 - INFO - ✅ Screenshot saved to visibility_dashboard_2026-04-05.png
+2026-04-05 08:10:26,084 - INFO - 📁 Screenshot archived to archives/visibility_dashboard_2026-04-05.png
+2026-04-05 08:10:26,085 - INFO - Removed old archive: audit_results_2026-01-11.json
+2026-04-05 08:10:26,085 - INFO - Removed old archive: visibility_dashboard_2026-01-11.html
+2026-04-05 08:10:26,086 - INFO - Removed old archive: visibility_dashboard_2026-01-11.png
+2026-04-05 08:10:26,086 - INFO - Cleaned up 3 old archive(s)
+2026-04-05 08:10:26,086 - INFO - 
+============================================================
+2026-04-05 08:10:26,086 - INFO - 📈 AUDIT SUMMARY
+2026-04-05 08:10:26,086 - INFO - ============================================================
+2026-04-05 08:10:26,086 - INFO - 🎯 Overall Visibility Score: 0.0%
+2026-04-05 08:10:26,086 - INFO - 🏆 Overall Ranking: #854 of 853
+2026-04-05 08:10:26,086 - INFO - 
+🎯 GOALS PROGRESS: 0/4 LLMs achieved target
+2026-04-05 08:10:26,086 - INFO -    --------------------------------------------------
+2026-04-05 08:10:26,086 - INFO -    🔴 Claude: 0.0% / 25% target (0.0% progress)
+2026-04-05 08:10:26,086 - INFO -    🔴 Grok: 0.0% / 25% target (0.0% progress)
+2026-04-05 08:10:26,087 - INFO -    🔴 Gemini: 0.0% / 40% target (0.0% progress)
+2026-04-05 08:10:26,087 - INFO -    🔴 ChatGPT: 0.0% / 40% target (0.0% progress)
+2026-04-05 08:10:26,087 - INFO - 
+📊 Weekly Changes (since 2026-03-29):
+2026-04-05 08:10:26,087 - INFO -    ➡️ Visibility unchanged this week
+2026-04-05 08:10:26,087 - INFO -    🏆 Ranking improved by 45 position(s)
+2026-04-05 08:10:26,087 - INFO - 
+📅 Monthly Changes (since 2026-03-08):
+2026-04-05 08:10:26,087 - INFO -    📉 Visibility decreased by 0.4% this month
+2026-04-05 08:10:26,087 - INFO -    ⬇️ Ranking dropped by 216 position(s)
+2026-04-05 08:10:26,087 - INFO - 
+📅 Monthly Comparison (3 months):
+2026-04-05 08:10:26,087 - INFO -    Jan 2026: 9.6% visibility (Rank #12)
+2026-04-05 08:10:26,087 - INFO -    Feb 2026: 4.5% visibility (Rank #298)
+2026-04-05 08:10:26,087 - INFO -    Mar 2026: 0.1% visibility (Rank #817)
+2026-04-05 08:10:26,087 - INFO - 
+📊 By LLM:
+2026-04-05 08:10:26,088 - INFO -    Claude: 0.0% (0/66 queries)
+2026-04-05 08:10:26,088 - INFO -    Grok: 0.0% (0/66 queries)
+2026-04-05 08:10:26,088 - INFO -    Gemini: 0.0% (0/66 queries)
+2026-04-05 08:10:26,088 - INFO -    ChatGPT: 0.0% (0/66 queries)
+2026-04-05 08:10:26,088 - INFO - 
+⚠️  Weak Spots:
+2026-04-05 08:10:26,088 - INFO -    - Prompts: 0.0%
+2026-04-05 08:10:26,088 - INFO - 
+✅ Audit complete!
+2026-04-05 08:10:26,088 - INFO -    Dashboard: visibility_dashboard.html
+2026-04-05 08:10:26,088 - INFO -    Raw data: audit_results.json
+2026-04-05 08:10:26,088 - INFO -    Screenshot: visibility_dashboard_2026-04-05.png
+2026-04-05 08:10:26,088 - INFO -    Archives: archives/
